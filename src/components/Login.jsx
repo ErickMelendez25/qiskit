@@ -32,7 +32,7 @@ const Login = () => {
     try {
       // Verifica si estás en producción (Railway) o en desarrollo (localhost)
       const apiUrl = process.env.NODE_ENV === 'production' 
-      ? 'hhttps://qiskit-production.up.railway.app/login' 
+      ? 'https://qiskit-production.up.railway.app/login' 
       : 'http://localhost:5000/login';
 
       console.log("API URL:", apiUrl);  // Verifica si la URL es correcta

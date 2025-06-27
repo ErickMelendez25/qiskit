@@ -50,106 +50,84 @@ wss.on('connection', (ws) => {
 // Variable para manejar el estado de conexión del puerto COM14
 let cocheraConectada = false;
 
-// ⬇️ Conexión serial con Arduino 1: Cochera (COM14)
-const portSerial = new SerialPort({ path: 'COM14', baudRate: 9600 }, (err) => {
-  if (err) {
-    console.error('❌ No se pudo abrir COM14:', err.message);
-    cocheraConectada = false;
-  } else {
-    console.log('✅ COM14 conectado');
-    cocheraConectada = true;
+// Solo ejecutar esto si **NO** estamos en producción
+if (process.env.NODE_ENV !== 'production') {
+  console.log('✅ Ambiente local detectado: habilitando puertos COM');
 
-    // Notificar a los clientes WebSocket que está conectado
-    wss.clients.forEach(client => {
-      if (client.readyState === 1) {
-        client.send(JSON.stringify({ tipo: 'cocheraConexion', conectado: true }));
-      }
-    });
-  }
-});
+  // ⬇️ COM14 - Cochera
+  const portSerial = new SerialPort({ path: 'COM14', baudRate: 9600 }, (err) => {
+    if (err) {
+      console.error('❌ No se pudo abrir COM14:', err.message);
+    } else {
+      console.log('✅ COM14 conectado');
 
-// Detectar desconexión del puerto COM14
-portSerial.on('close', () => {
-  console.log('❌ COM14 desconectado');
-  cocheraConectada = false;
+      const parser = portSerial.pipe(new ReadlineParser({ delimiter: '\n' }));
 
-  // Notificar a los clientes WebSocket que se desconectó
-  wss.clients.forEach(client => {
-    if (client.readyState === 1) {
-      client.send(JSON.stringify({ tipo: 'cocheraConexion', conectado: false }));
-    }
-  });
-});
-
-const parser = portSerial.pipe(new ReadlineParser({ delimiter: '\n' }));
-
-parser.on('data', data => {
-  const estado = data.trim().toUpperCase();
-  if (estado === "OCUPADO" || estado === "LIBRE") {
-    console.log(`Estado recibido: ${estado}`);
-
-    // Enviar a los clientes WebSocket
-    wss.clients.forEach(client => {
-      if (client.readyState === 1) {
-        client.send(JSON.stringify({ sensorId: 1, estado }));
-      }
-    });
-
-    // Guardar en la base de datos
-    const query = "INSERT INTO estado_cocheras (sensor_id, estado) VALUES (?, ?)";
-    db.query(query, [1, estado], (err) => {
-      if (err) console.error('Error al guardar en DB:', err);
-    });
-  }
-});
-
-// ✅ Segundo Arduino: Llamado del paciente (COM15)
-function manejarArduinoPaciente(path) {
-  const port = new SerialPort({ path, baudRate: 9600 });
-  const parser = port.pipe(new ReadlineParser({ delimiter: '\n' }));
-
-  parser.on('data', data => {
-    const estado = data.trim().toUpperCase(); // LLAMANDO o LIBRE
-    if (estado === 'LLAMANDO' || estado === 'LIBRE') {
-      console.log(`Paciente dice: ${estado}`);
-
-      // Enviar estado del paciente a los clientes WebSocket
-      wss.clients.forEach(client => {
-        if (client.readyState === 1) {
-          client.send(JSON.stringify({ tipo: 'paciente', estado }));
+      parser.on('data', data => {
+        const estado = data.trim().toUpperCase();
+        if (estado === "OCUPADO" || estado === "LIBRE") {
+          console.log(`Estado recibido: ${estado}`);
+          wss.clients.forEach(client => {
+            if (client.readyState === 1) {
+              client.send(JSON.stringify({ sensorId: 1, estado }));
+            }
+          });
         }
       });
 
-      // Guardar en base de datos si lo deseas
+      portSerial.on('close', () => {
+        console.log('❌ COM14 desconectado');
+      });
     }
   });
 
-  port.on('error', err => console.error(`❌ Error paciente:`, err.message));
+  // ⬇️ COM15 - Paciente
+  const manejarArduinoPaciente = (path) => {
+    const port = new SerialPort({ path, baudRate: 9600 });
+    const parser = port.pipe(new ReadlineParser({ delimiter: '\n' }));
+
+    parser.on('data', data => {
+      const estado = data.trim().toUpperCase();
+      if (estado === 'LLAMANDO' || estado === 'LIBRE') {
+        console.log(`Paciente dice: ${estado}`);
+        wss.clients.forEach(client => {
+          if (client.readyState === 1) {
+            client.send(JSON.stringify({ tipo: 'paciente', estado }));
+          }
+        });
+      }
+    });
+
+    port.on('error', err => console.error(`❌ Error paciente:`, err.message));
+  };
+
+  manejarArduinoPaciente('COM15');
+
+  // ⬇️ COM16 - Riego
+  const manejarArduinoRiego = (path) => {
+    const port = new SerialPort({ path, baudRate: 9600 });
+    const parser = port.pipe(new ReadlineParser({ delimiter: '\n' }));
+
+    parser.on('data', data => {
+      const estado = data.trim().toUpperCase();
+      if (estado === 'RIEGO' || estado === 'OK') {
+        console.log(`Riego: ${estado}`);
+        wss.clients.forEach(client => {
+          if (client.readyState === 1) {
+            client.send(JSON.stringify({ tipo: 'riego', estado }));
+          }
+        });
+      }
+    });
+
+    port.on('error', err => console.error(`❌ Error riego:`, err.message));
+  };
+
+  manejarArduinoRiego('COM16');
+
+} else {
+  console.log('🌐 Producción detectada: conexiones COM deshabilitadas');
 }
-
-manejarArduinoPaciente('COM15');
-
-
-// 🆕 🅾️ Riego (COM16)
-function manejarArduinoRiego(path) {
-  const port = new SerialPort({ path, baudRate: 9600 });
-  const parser = port.pipe(new ReadlineParser({ delimiter: '\n' }));
-  parser.on('data', data => {
-    const estado = data.trim().toUpperCase(); // RIEGO o OK
-    if (estado === 'RIEGO' || estado === 'OK') {
-      console.log(`Riego: ${estado}`);
-      wss.clients.forEach(client => client.send(JSON.stringify({ tipo: 'riego', estado })));
-    }
-  });
-  port.on('error', err => console.error(`❌ Error riego:`, err.message));
-}
-manejarArduinoRiego('COM16');
-
-
-
-
-
-
 
 
 
