@@ -1,26 +1,32 @@
 import sys
 import json
+import os
+from dotenv import load_dotenv
 import mysql.connector
 import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import SpectralClustering
-
 from qiskit.circuit.library import ZZFeatureMap
 from qiskit_machine_learning.kernels import FidelityQuantumKernel
+
+# Cargar las variables del archivo .env
+load_dotenv()
 
 # Leer zona_id desde línea de comandos
 zona_id = int(sys.argv[1])
 
-# Conexión a MySQL
+# Conexión a MySQL (Railway)
 conn = mysql.connector.connect(
-    host='localhost',
-    user='Erick',
-    password='erickMV123@',
-    database='Qiskit'
+    host=os.getenv("DB_HOST"),
+    port=int(os.getenv("DB_PORT", 3306)),
+    user=os.getenv("DB_USER"),
+    password=os.getenv("DB_PASSWORD"),
+    database=os.getenv("DB_NAME")
 )
+
 cursor = conn.cursor(dictionary=True)
 
-# Consulta de sensores
+# Consulta de sensores por zona
 cursor.execute("""
     SELECT s.tipo AS tipo_sensor, l.valor
     FROM lecturas_sensor l
@@ -29,23 +35,23 @@ cursor.execute("""
     WHERE d.zona_id = %s
 """, (zona_id,))
 rows = cursor.fetchall()
+
 cursor.close()
 conn.close()
 
-# Agrupar valores por tipo de sensor
+# Agrupar por tipo de sensor
 datos = {}
 for row in rows:
     tipo = row['tipo_sensor'].lower()
     valor = float(row['valor'])
-    if tipo not in datos:
-        datos[tipo] = []
-    datos[tipo].append(valor)
+    datos.setdefault(tipo, []).append(valor)
 
+# Tipos de sensores esperados
 tipos_referencia = ['temperatura', 'humedad', 'ph', 'nitrógeno', 'fósforo', 'potasio']
-X = []
 num_datos = len(datos.get('temperatura', []))
+X = []
 
-# Convertir datos a matriz numérica completa
+# Construir matriz de datos
 for i in range(num_datos):
     fila = []
     for tipo in tipos_referencia:
@@ -55,22 +61,20 @@ for i in range(num_datos):
 X = np.array(X)
 X = StandardScaler().fit_transform(X)
 
-# Quantum kernel con FidelityQuantumKernel (sin sampler manual)
+# Kernel cuántico y clustering
 feature_map = ZZFeatureMap(feature_dimension=X.shape[1], reps=2)
 kernel = FidelityQuantumKernel(feature_map=feature_map)
 kernel_matrix = kernel.evaluate(x_vec=X)
 
-# Clustering con Spectral Clustering usando el kernel cuántico
 clustering = SpectralClustering(n_clusters=2, affinity='precomputed')
 labels = clustering.fit_predict(kernel_matrix)
 
-# Resultado final
+# Resultado
 resultado = {
     "zona_id": zona_id,
     "clusters": labels.tolist(),
     "tipos": tipos_referencia,
-    "valores": X.tolist()  # ← Agregado para devolver los datos usados
+    "valores": X.tolist()
 }
-
 
 print(json.dumps(resultado))
