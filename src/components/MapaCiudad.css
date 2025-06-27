@@ -1,0 +1,52 @@
+/* MapaCiudad.css */
+
+.mapa-contenedor {
+  width: 100%;
+  height: 400px; /* ajusta la altura que desees */
+  margin: 1rem 0;
+  position: relative;
+}
+
+.mapa-area {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+/* Personaliza el estilo de los marcadores si deseas */
+.custom-marker {
+  /* ya se configura inline en JS */
+}
+
+.popup-content h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+.popup-content p {
+  margin: 0.2rem 0 0;
+  font-size: 0.9rem;
+}
+
+
+/* Ajusta la posición y estilo de la etiqueta junto al marcador */
+.marker-label {
+  background: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  color: #333;
+  white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  pointer-events: none; /* para que el clic pase al marcador */
+}
+
+/* Si quieres que el label aparezca solo en hover, podrías: */
+/*
+.custom-marker .marker-label {
+  display: none;
+}
+.custom-marker:hover .marker-label {
+  display: block;
+}
+*/

@@ -1,0 +1,124 @@
+/* Estilos para el pie de página */
+.dashboard-footer {
+    margin-top: 0px;
+    
+    background: #2C3E50; /* Gradiente verde institucional de la UNCP */
+    padding: 30px 20px; /* Añadido más espacio para hacerlo más elegante */
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column; /* Asegura que los elementos estén apilados verticalmente */
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1); /* Sombra sutil en la parte superior */
+    position: relative;
+    z-index: 10;
+}
+
+/* Contenedor de las opciones del pie de página */
+.footer-options {
+    display: flex;
+    gap: 30px; /* Espacio mayor entre los elementos */
+    justify-content: center;
+    margin-top: -15px;
+    align-items: center;
+    margin-bottom: 13px; /* Espaciado hacia abajo para separar de las opciones del texto */
+}
+
+/* Estilo de cada item del pie de página */
+.footer-item {
+    text-decoration: none;
+    color: white;
+    font-size: 1rem; /* Ajuste el tamaño de la fuente a 1rem por defecto */
+    font-weight: 500;
+    padding: 10px 20px; /* Ajuste de padding para mantener proporciones */
+    border-radius: 30px; /* Bordes más redondeados */
+    background-color: rgba(255, 255, 255, 0.1); /* Fondo sutil, semi-transparente */
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease, padding 0.3s ease;
+}
+
+/* Efecto de hover para los items */
+.footer-item:hover {
+    background-color: #F1C40F; /* Amarillo suave para resaltar sobre el fondo verde */
+    transform: translateY(-5px); /* Sutil efecto de elevar */
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2); /* Sombra más prominente */
+    padding: 12px 25px; /* Aumentar el padding al hacer hover */
+}
+
+/* Efecto de hover con sombra más intensa */
+.footer-item:focus, .footer-item:hover {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); /* Sombra más intensa */
+}
+
+/* Estilos para el texto de animación */
+.footer-text h3 {
+    font-family: 'Playfair Display', serif; /* Aplica la nueva fuente */
+    font-size: 1.2rem; /* Aumento del tamaño para hacerlo más visible */
+    color: rgb(255, 251, 0); /* Mantienes el color dorado */
+    text-align: center;
+    font-weight: 500; /* Peso de fuente un poco más fuerte para darle elegancia */
+    font-style: italic; /* Si deseas que tenga un estilo itálico */
+    margin-top: -12px; /* Menor espacio con respecto al menú para que no esté tan lejos */
+    opacity: 1; /* Asegura que el texto sea visible desde el principio */
+    animation: fadeIn 2s forwards; /* Animación de desvanecimiento */
+}
+
+/* Animación de desvanecimiento */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Responsive: hacer que el pie de página se adapte a pantallas pequeñas */
+@media (max-width: 750px) {
+    .dashboard-footer {
+        margin-top: 10%;
+        margin-bottom: 30px;
+       
+        padding: 20px 10px; /* Menos espacio en pantallas pequeñas */
+    }
+
+    .footer-options {
+        flex-direction: column; /* Los items se alinean verticalmente */
+        gap: 15px;
+    }
+
+    .footer-item {
+        font-size: 0.9rem; /* Reducción del tamaño de la fuente para pantallas más pequeñas */
+        padding: 8px 15px; /* Ajustar el tamaño de los botones */
+    }
+
+    .footer-text h3 {
+        font-size: 1rem; /* Reducir el tamaño de fuente en pantallas pequeñas */
+        margin-top: 5px; /* Asegura que no haya mucho espacio debajo de las opciones */
+    }
+}
+
+/* Para pantallas aún más pequeñas (como teléfonos muy pequeños) */
+@media (max-width: 500px) {
+    .dashboard-footer {
+        position: absolute;
+        margin-top: 27px;
+        
+       
+        padding: 20px 10px; /* Menos espacio en pantallas pequeñas */
+    }
+
+    .footer-options {
+        flex-direction: column; /* Los items se alinean verticalmente */
+        gap: 15px;
+    }
+
+    .footer-item {
+        font-size: 0.9rem; /* Reducción del tamaño de la fuente para pantallas más pequeñas */
+        padding: 8px 15px; /* Ajustar el tamaño de los botones */
+    }
+
+    .footer-text h3 {
+        font-size: 1rem; /* Reducir el tamaño de fuente en pantallas pequeñas */
+        margin-top: 5px; /* Asegura que no haya mucho espacio debajo de las opciones */
+    }
+}

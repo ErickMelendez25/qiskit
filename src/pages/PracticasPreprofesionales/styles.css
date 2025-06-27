@@ -1,0 +1,166 @@
+/* Estilos Generales */
+
+/* Ajuste para el campo de observaciones */
+input[type="text"] {
+    width: 100%; /* Asegura que el campo ocupe el 100% del ancho disponible dentro de la celda */
+    padding: 6px; /* Ajusta el relleno dentro del campo de texto */
+    font-size: 12px; /* Ajusta el tamaño de la fuente */
+    border: 1px solid #ddd; /* Bordes ligeros */
+    border-radius: 4px; /* Bordes redondeados */
+    box-sizing: border-box; /* Incluye el padding y borde en el tamaño total del campo */
+  }
+  
+  /* Ajuste para el selector de revisor */
+  select {
+    width: 100%; /* Hace que el select ocupe todo el ancho disponible dentro de la celda */
+    padding: 6px; /* Ajusta el relleno dentro del select */
+    font-size: 12px; /* Ajusta el tamaño de la fuente */
+    border: 1px solid #ddd; /* Bordes ligeros */
+    border-radius: 4px; /* Bordes redondeados */
+    box-sizing: border-box; /* Incluye el padding y borde en el tamaño total del select */
+  }
+  
+  
+  /* Contenedor que hace que la tabla se ajuste */
+  .table-container {
+    max-width: 100%;
+    overflow-x: auto;
+    margin: 0 auto;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  
+  /* Tabla ajustada */
+  table {
+    width: 100%;
+    table-layout: fixed; /* Hace que las celdas se ajusten uniformemente */
+    font-size: 14px; /* Reducir el tamaño de la fuente */
+    border-collapse: collapse; /* Colapsar bordes */
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave alrededor de la tabla */
+  }
+  
+  /* Encabezados y celdas */
+  th, td {
+    padding: 8px;
+    text-align: center;
+    word-wrap: break-word; /* Permite que el texto largo se ajuste dentro de la celda */
+    overflow-wrap: break-word; /* Asegura que el texto se ajuste sin desbordar */
+    border: 1px solid #ddd; /* Bordes ligeros */
+    max-width: 250px; /* Limitar el tamaño máximo de cada celda */
+    vertical-align: top; /* Alineación superior de los textos */
+  }
+  
+  /* Encabezado de la tabla */
+  th {
+    background-color: #1c83f8; /* Color de fondo azul para los encabezados */
+    color: white; /* Color de la letra blanco */
+    font-weight: bold;
+    font-size: 13px;
+  }
+  
+  button {
+    padding: 5px 10px;
+    font-size: 10px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
+  
+  /* Ajuste de la tabla para pantallas pequeñas */
+  @media (max-width: 768px) {
+    table {
+      font-size: 10px; /* Reducir aún más el tamaño de la fuente en pantallas pequeñas */
+    }
+  
+    th, td {
+      padding: 6px; /* Reducir el espacio de relleno */
+    }
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f9;
+    color: #0e0d0d;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  /* Estilo de botones */
+  button {
+    background-color: #007BFF;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  button:focus {
+    outline: none;
+  }
+  
+  /* Estilo para los botones de alternar tablas */
+  .table-toggle-buttons {
+    margin-bottom: 20px;
+  }
+  
+  .table-toggle-buttons button {
+    padding: 8px 16px; /* Ajusta el tamaño del relleno (vertical y horizontal) */
+    font-size: 14px; /* Ajusta el tamaño de la fuente */
+    background-color: #28a745; /* Color de fondo verde */
+    color: white; /* Color del texto en blanco */
+    border: none; /* Sin bordes */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+    transition: background-color 0.3s ease; /* Efecto suave al cambiar el color */
+  }
+  
+  /* El botón activo tendrá un fondo azul y texto blanco */
+  .table-toggle-buttons button.active {
+    background-color: #007BFF;
+    color: #fff;
+  }
+  
+  /* El botón no activo tendrá un fondo gris claro */
+  .table-toggle-buttons button:not(.active) {
+    background-color: #f1f1f1;
+    color: #333;
+  }
+  
+  h3 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  h4 {
+    color: #555;
+    font-size: 20px;
+    margin-top: 20px;
+  }
+  
+  .active-table-indicator {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #007BFF;
+  }
+  

@@ -1,0 +1,118 @@
+.dashboard-container {
+  padding: 2rem;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f9fafb;
+  min-height: 100vh;
+}
+
+.dashboard-title {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: #1f2937;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.card {
+  background-color: #ffffff;
+  padding: 1.2rem;
+  border-radius: 1rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card h3 {
+  margin-bottom: 0.8rem;
+  font-size: 1.1rem;
+  color: #111827;
+}
+
+.centered {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.execute-button {
+  background-color: #4f46e5;
+  color: white;
+  font-weight: 600;
+  padding: 0.8rem 2rem;
+  border-radius: 0.75rem;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.execute-button:hover {
+  background-color: #4338ca;
+}
+
+.result-card {
+  background-color: #f3f4f6;
+  padding: 1rem;
+  margin-top: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+
+.resultado-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.resultado-tabla th,
+.resultado-tabla td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+}
+
+.result-card {
+  margin-top: 30px;
+  padding: 20px;
+  background: #f3f4f6;
+  border-radius: 12px;
+  box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
+}
+
+
+/* En DashboardQiskit.css */
+
+.zona-select {
+  margin-bottom: 1rem;
+}
+
+/* Botón para mostrar/ocultar mapa */
+.map-toggle-button {
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+}
+
+.map-toggle-button:hover {
+  background-color: #4338ca;
+}
+
+/* Wrapper del mapa para dar espacio */
+.map-wrapper {
+  margin-bottom: 1.5rem;
+}

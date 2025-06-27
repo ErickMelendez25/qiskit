@@ -1,0 +1,134 @@
+/* AdminView.css */
+
+.admin-view {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 2rem;
+    padding: 1rem;
+  }
+
+.admin-top-row{
+
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;                   /* Espacio entre ellos */
+
+    margin-bottom: 1rem;         /* Separación inferior */
+
+
+}
+  
+  .admin-stats {
+
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;                   /* Espacio entre ellos */
+    justify-content: flex-start; /* Alineación a la izquierda */
+    margin-bottom: 0rem;         /* Separación inferior */
+  }
+  
+  .admin-box {
+    background-color: #27272a;
+    width: 100px;
+    height: 660px;
+    color: white;
+    padding: 1.5rem;
+    border-radius: 1rem;
+
+    flex: 1;
+    max-width: 13.5%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .admin-box h3 {
+    font-size: 0.875rem;
+    color: #a1a1aa;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .admin-box p {
+    font-size: 2.25rem;
+    font-weight: 800;
+  }
+  
+  .estado-container {
+    display: flex;               /* ✅ Cambiado de "colum" a "flex" */
+    flex-direction: row;         /* ✅ Elementos en fila horizontal */
+    gap: 1rem;                   /* Espacio entre ellos */
+    justify-content: flex-start; /* Alineación a la izquierda */
+    margin-bottom: 1rem;         /* Separación inferior */
+  }
+  
+  
+  .charts-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2%;
+    justify-content: space-between;
+  }
+  
+  .chart-box {
+    flex: 1 1 30%;
+    min-width: 280px;
+  }
+  
+  .chart-card {
+    padding: 1rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .sensor-chart-container {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+  .chart-card {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .chart-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .chart-wrapper {
+    width: 100%;
+    overflow-x: auto;
+  }
+  
+  .sensor-status {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    font-size: 0.95rem;
+    color: #444;
+  }
+  
+  
+  .map-card {
+    width: 1080px;
+  }
+  
+  /* Responsive design */
+  @media (max-width: 1024px) {
+    .charts-row {
+      flex-direction: column;
+    }
+  
+    .chart-box {
+      width: 100%;
+    }
+  
+
+  }
+  

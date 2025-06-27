@@ -1,0 +1,25 @@
+body {
+    background-color: #0d1117;
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  .card-gradient {
+    border-radius: 1.25rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  }
+  
+  .chart-wrapper {
+    background: #1e293b;
+    padding: 1rem;
+    border-radius: 1.5rem;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+  }
+  
+  .section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #e2e8f0;
+    margin-bottom: 1rem;
+  }
+  

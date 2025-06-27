@@ -1,0 +1,482 @@
+/* Estilos generales */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background-color:   #34495E;
+    color: rgb(255, 255, 255);
+    position: relative; /* Cambiar de 'fixed' a 'relative' */
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    box-sizing: border-box;
+    z-index: 1; /* Aseguramos que el header tenga un z-index superior */
+    overflow: hidden; /* Evita el desbordamiento de contenido */
+    height: 80px; /* Ajustar la altura aquí */
+}
+
+.logout-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    color: #34495E;
+    font-size: 3vh;
+    font-weight: bold;
+    background-color: rgba(0, 0, 0, 0.5); /* fondo oscuro translúcido */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9000; /* más alto que el menú */
+  }
+  
+  .modal-content {
+    background-color: white;
+    padding: 30px 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+  }
+  
+  .modal-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .modal-buttons button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #00c73c;
+    color: white;
+    font-size: 2vh;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .modal-buttons button:hover {
+    background-color: #009d30;
+  }
+  
+
+
+/* Estilo para los logos */
+.logo-container {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.logo-container img {
+    max-width: 100%;  /* Ajusta el tamaño máximo de la imagen a su contenedor */
+    height: 65px;     /* Mantiene la proporción de la imagen */
+    transition: transform 0.3s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+
+.logo-container img:nth-child(2) {
+    margin-left: 50px;
+}
+
+.logo-animate {
+    transform: scale(1.1);
+    opacity: 1;
+}
+
+/* Contenedor del menú */
+.navbar-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    margin-right: 100px; /* Añadido margen derecho para crear espacio entre el menú y el icono */
+}
+
+/* Estilos de las opciones del menú */
+.header-options {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-item {
+    
+    text-decoration: none;
+    color: rgb(255, 10, 214);
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 8px 15px;
+    border-radius: 20px;
+    background-color: rgb(255, 255, 255) ;/*Fondo blanco semi-transparente */
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease, padding 0.3s ease;
+    white-space: nowrap;
+}
+
+.nav-item:hover {
+    
+    background-color: rgba(255, 217, 5, 0.959);  /* Fondo blanco semi-transparente al pasar el mouse */
+    color: #111131;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+    padding: 10px 20px;
+}
+
+
+
+
+/* Menú de opciones */
+.menu-options {
+    position: fixed;
+    top: 60px;
+    right: 10px;
+    background-color: rgb(248, 248, 248);
+    border-radius: 8px;
+    z-index: 3000; /* más alto que modales normales */
+    padding: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.menu-options ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.menu-options li {
+    padding: 12px 0;
+    color: #333;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 50;
+    text-align: center;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.menu-options li:hover {
+    border-radius: 8px;
+    background-color: #00c73c;
+    color: white;
+}
+
+/* Contenedor de la foto de perfil */
+.user-photo-container {
+    width: 50px;  /* Tamaño del contenedor */
+    height: 50px; /* Tamaño del contenedor */
+    border-radius: 50%; /* Hace el contenedor circular */
+    overflow: hidden; /* Asegura que cualquier contenido fuera del círculo se oculte */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Imagen dentro del contenedor */
+.user-icon {
+    width: 100%;   /* La imagen ocupa el 100% del contenedor */
+    height: 100%;  /* La imagen ocupa el 100% del contenedor */
+    object-fit: cover; /* Asegura que la imagen cubra el área del contenedor sin distorsionarse */
+    border-radius: 50%; /* Hace la imagen circular */
+}
+
+/* Estilos para el modal de confirmación */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Asegura que esté en una capa superior */
+    transition: opacity 0.3s ease-in-out;
+}
+
+.modal-container {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+    z-index: 10000;
+}
+
+.modal-container h2 {
+    color: black;
+    font-size: 18px; /* Tamaño de texto adecuado */
+}
+
+/* Botones del modal */
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.btn-cancel, .btn-confirm {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-cancel {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.btn-cancel:hover {
+    background-color: #c0392b;
+}
+
+.btn-confirm {
+    background-color: #2ecc71;
+    color: white;
+}
+
+.btn-confirm:hover {
+    background-color: #27ae60;
+}
+
+/* Asegura que el contenido principal no quede cubierto por el header fijo */
+body {
+    margin-top: 80px; /* Ajusta el espacio para que no se solape con el header fijo */
+}
+
+
+
+
+/* Media Queries */
+
+/* Para pantallas grandes (más de 1024px) */
+@media (min-width: 1024px) {
+    .dashboard-header {
+        padding: 30px;
+    }
+
+    .navbar-container {
+        justify-content: center;
+    }
+
+    .header-options {
+        display: flex;
+        justify-content: center;
+    }
+
+    .user-info {
+        font-size: 1rem;
+        text-align: right;
+    }
+
+    .user-info p {
+
+        font-size: 0.78rem;
+    }
+}
+
+/* Para pantallas medianas (como tabletas o pantallas más pequeñas que 1024px) */
+@media (max-width: 1024px) {
+    .navbar-container {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .logo-container img {
+        height: 60px;
+    }
+
+    .header-options {
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .nav-item {
+        font-size: 1rem;
+        padding: 10px 20px;
+    }
+
+    .user-info {
+        font-size: 12px; /* Ajuste de tamaño para pantallas más pequeñas */
+        text-align: center;
+        margin-top: 5px;
+    }
+
+    .user-info p {
+        font-size: 12px;
+        text-align: center;
+    }
+}
+
+/* Para pantallas pequeñas (móviles) */
+@media (max-width: 768px) {
+
+
+
+    .logo-container {
+ 
+        margin-left: 10%;
+        
+    }
+    
+    .logo-container img {
+        max-width: 100%;  /* Ajusta el tamaño máximo de la imagen a su contenedor */
+        height: 65px;     /* Mantiene la proporción de la imagen */
+        transition: transform 0.3s ease-in-out, opacity 0.5s ease-in-out;
+      }
+
+    .header-options {
+        
+        justify-content: center;
+        flex-direction: column;
+        flex-wrap: wrap;
+        margin-left: 20%;
+        font-size: 20px;
+        
+    }
+
+    .header-center{
+        justify-content: center;
+        margin-right: 20%;
+        font-size: 10px;
+
+    }
+
+    .nav-item {
+        font-size: 0.9rem;
+        padding: 8px 15px;
+    }
+
+    .user-info {
+        font-size: 11px; /* Ajuste aún más pequeño en pantallas móviles */
+        text-align: center;
+        margin-top: 5px;
+    }
+
+    .user-info p {
+        font-size: 11px;
+        text-align: center;
+    }
+
+
+    
+    .modal-buttons button {
+        padding: 15px 25px;
+        border: none;
+        background-color: #00c73c;
+        color: white;
+        font-size: 2vh;
+        font-weight: bold;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+      }
+      
+      .modal-buttons button:hover {
+        background-color: #009d30;
+      }
+    
+    
+}
+
+
+/* Para pantallas pequeñas (móviles) */
+@media (max-width: 599px) {
+
+
+
+
+    
+
+
+    .header-options {
+        display: flex; /* <- esencial */
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+        flex-wrap: nowrap; /* <- evita que se dividan en varias líneas */
+        font-size: 15px;
+        gap: 15px; /* opcional: separa los elementos de forma limpia */
+    }
+    
+
+    .header-center{
+        justify-content: center;
+        margin-right: 20%;
+        font-size: 10px;
+
+    }
+
+    .nav-item {
+        font-size: 0.9rem;
+        padding: 8px 15px;
+    }
+
+    .user-info {
+        display: flex; /* <- esencial */
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+        flex-wrap: nowrap; /* <- evita que se dividan en varias líneas */
+        font-size: 15px;
+        gap: 15px; /* opcional: separa los elementos de forma limpia */
+    }
+
+    .user-info p {
+        display: flex; /* <- esencial */
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+        flex-wrap: nowrap; /* <- evita que se dividan en varias líneas */
+        font-size: 15px;
+        gap: 15px; /* opcional: separa los elementos de forma limpia */
+    }
+
+    .user-photo-container {
+        width: 50%;  /* Tamaño del contenedor */
+        height: auto; /* Tamaño del contenedor */
+        border-radius: 50%; /* Hace el contenedor circular */
+        overflow: hidden; /* Asegura que cualquier contenido fuera del círculo se oculte */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: transform 0.3s ease-in-out, opacity 0.5s ease-in-out;
+    }
+
+    .logo-container img {
+        width: 75%; /* o por ejemplo 30% */
+        height: auto;
+        transition: transform 0.3s ease-in-out, opacity 0.5s ease-in-out;
+    }
+
+    .modal-buttons button {
+        padding: 15px 25px;
+        border: none;
+        background-color: #00c73c;
+        color: white;
+        font-size: 2vh;
+        font-weight: bold;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+      }
+      
+      .modal-buttons button:hover {
+        background-color: #009d30;
+      }
+    
+    
+}

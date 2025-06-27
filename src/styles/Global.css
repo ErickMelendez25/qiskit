@@ -1,0 +1,264 @@
+/* Aseguramos que el body y el html ocupen el 100% de la altura de la ventana */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#root {
+  height: 100%; /* Aseguramos que el contenedor root también ocupe el 100% */
+}
+
+/* Aseguramos que el body no tenga márgenes y el fondo de la página se vea correctamente */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+}
+
+/* Estilo para la vista de opción */
+.vista-opcion {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+/* Cabecera de la vista de opción */
+.vista-opcion-header {
+  margin-bottom: 20px;
+}
+
+/* Contenedor principal con la lista de procesos y los detalles */
+.vista-opcion-content {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+/* Estilo para la lista de procesos (izquierda) */
+.procesos-lista {
+  width: 25%;
+  background-color: #f4f4f4;
+  padding: 10px;
+  border-radius: 5px;
+  list-style-type: none; /* Elimina los puntos o guiones de la lista */
+  margin: 0;
+  padding-left: 0; /* Elimina cualquier indentación */
+}
+
+/* Estilo para el detalle del proceso (derecha) */
+.proceso-detalle {
+  width: 70%;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Enlaces dentro de la lista de procesos */
+.procesos-lista a {
+  display: block;
+  padding: 8px;
+  margin-bottom: 10px;
+  background-color: #20a80e;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+/* Asegurarse de que no haya guiones ni puntos previos */
+.procesos-lista li {
+  list-style-type: none; /* Esto es importante si usas <li> */
+  margin-left: 0; /* Elimina cualquier margen extra */
+}
+
+.procesos-lista a:hover {
+  background-color: #c9cad4;
+}
+
+/* Estilo para el formulario */
+form {
+  margin: 20px 0;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo de los campos de entrada */
+form input[type="text"],
+form input[type="tel"],
+form input[type="file"] {
+  width: 100%;
+  padding: 8px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+/* Botón de enviar */
+form button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+form button:hover {
+  background-color: #dff2ff;
+}
+
+/* Estilo para el formulario */
+form {
+  margin: 20px 0;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo de los campos de entrada */
+form input[type="text"],
+form input[type="tel"],
+form input[type="file"],
+form input[type="date"] {
+  width: 100%;
+  padding: 8px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+/* Botón de enviar */
+form button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+form button:hover {
+  background-color: #2980b9;
+}
+
+/* Estilo para el formulario */
+form {
+  margin: 20px 0;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo de los campos de entrada */
+form input[type="text"],
+form input[type="tel"],
+form input[type="file"],
+form input[type="date"] {
+  width: 100%;
+  padding: 8px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+/* Botón de enviar */
+form button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+form button:hover {
+  background-color: #2980b9;
+}
+
+/* Estilo para el dropdown de Estado Proceso */
+.dropdown-toggle::after {
+display: none; /* Elimina el ícono del dropdown */
+}
+
+.dropdown-menu {
+min-width: 200px; /* Establece un ancho mínimo */
+}
+
+.dropdown-item {
+font-size: 14px;
+padding: 10px;
+}
+
+.table th,
+.table td {
+padding: 12px;
+text-align: center;
+}
+
+.table-striped tbody tr:nth-child(odd) {
+background-color: #f9f9f9;
+}
+
+.btn-outline-primary {
+color: #007bff;
+border-color: #007bff;
+}
+
+.btn-outline-primary:hover {
+background-color: #007bff;
+color: white;
+}
+
+.btn-success {
+background-color: #28a745;
+border-color: #28a745;
+color: white;
+}
+
+.btn-success:hover {
+background-color: #218838;
+border-color: #1e7e34;
+}
+
+/*ESTO PASA CUANDO SE DA CLCIK A UNA OPCION DE LA LISTA DE LAS PCION DE LOS PMACROPROCES*/
+/* Resaltar la opción seleccionada */
+.procesos-lista a.selected {
+background-color: #0bb40b; /* Color de fondo azul */
+color: rgb(252, 252, 252); /* Texto blanco */
+font-weight: bold; /* Texto en negrita */
+animation: parpadeo 1s ease-in-out infinite; /* Animación de parpadeo */
+}
+
+/* Animación de parpadeo */
+@keyframes parpadeo {
+0% {
+  opacity: 1;
+}
+50% {
+  opacity: 0.5;
+}
+100% {
+  opacity: 1;
+}
+}
+
+.procesos-lista a {
+display: block;
+padding: 8px;
+margin-bottom: 10px;
+background-color: #3b13db;
+color: white;
+text-decoration: none;
+border-radius: 5px;
+transition: background-color 0.3s ease;
+}
+
+.procesos-lista a:hover {
+font-weight: bold;
+background-color: #2eb82e;
+}

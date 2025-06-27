@@ -1,0 +1,1120 @@
+* {
+  box-sizing: border-box;
+}
+
+
+
+.modal {
+  position: fixed;
+  margin-top: 0px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  padding: 1rem;
+}
+
+ /*PARA EL LAPIC Y EL TACHO*/
+
+ 
+
+
+.modal h2 {
+  margin-bottom: 0%;
+  margin-top: 0;
+  font-size: 1.8rem;
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 5%;
+  margin-bottom: 5%;
+}
+
+label {
+  margin-bottom: 0%;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #34495e;
+
+}
+
+input[type="text"],
+input[type="number"],
+input[type="file"],
+textarea,
+select {
+
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  
+  border-color: #3498db;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+textarea {
+
+  margin-top:0%;
+  min-height: 5px;
+}
+
+button[type="submit"],
+button[type="button"] {
+  width: 100%;
+  padding: 0.7rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  display: flex;               /* Activar flexbox */
+  justify-content: center;     /* Centrar horizontalmente */
+  align-items: center;         /* Centrar verticalmente */
+  text-align: center;          /* Asegurar alineación de texto */
+}
+
+
+button[type="submit"] {
+  background-color: #3498db;
+  color: white;
+  font-weight: bold;
+}
+
+button[type="submit"]:hover {
+  background-color: #2980b9;
+}
+
+button[type="button"] {
+  background-color: #bdc3c7;
+  color: #2c3e50;
+}
+
+button[type="button"]:hover {
+  background-color: #95a5a6;
+}
+
+.form-grid {
+  
+  margin-top: 100px;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* dos columnas de igual tamaño */
+  gap: 1rem;
+}
+.form-actions {
+  grid-column: span 2; /* que ocupe toda la fila */
+  display: flex;
+  gap: 0.8rem;
+  justify-content: flex-end;
+}
+
+.form-group-full {
+
+  height: 50px;
+  grid-column: span 1;
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+
+  .form-group-full {
+    margin-bottom: 0%;
+    font-size: 2rem;
+    height: auto;
+
+    grid-column: span 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+
+
+
+  .modal{
+    
+    padding: 1rem;
+    border-radius: 10px;
+  
+
+  }
+
+  .modal h2 {
+    margin-bottom: 0%;
+    font-size: 1.5rem;
+  }
+
+  .form-grid {
+    margin-bottom: 0%;
+
+    margin-top: 100px;
+    height: 550px;
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* dos columnas de igual tamaño */
+    gap: 1rem;
+
+  }
+
+  label {
+   
+    font-size: 0.9rem;
+  }
+
+  input,.card-description{
+
+    padding: 1rem;
+    height: 8px;
+
+  }
+
+
+
+
+
+    input,
+  textarea,
+
+  select {
+    margin-top: 0%;
+    font-size: 0.8rem;
+    padding: 0.65rem;
+    height: 35px;
+
+  }
+
+  button {
+    margin-top: -15px;
+    font-size: 0.9rem;
+    height: 30px;
+    justify-content: center;
+  
+  }
+}
+
+
+/* Estilo general del Dashboard */
+.dashboard {
+    display: flex;
+    font-family: 'Arial', sans-serif;
+   
+  }
+  
+  /* Barra lateral */
+  .sidebar {
+    width: 200px;
+    background-color: #0c9790;
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Botones de categoría en la barra lateral */
+  .categories {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .category-btn {
+    background-color: #1fcac2;
+    color: white;
+    border: none;
+    padding: 15px;
+    margin: 10px 0;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .category-btn.active {
+    background-color: #34495E;
+  }
+  
+  .category-btn:hover {
+    background-color: #293a4b;
+  }
+  
+  /* Contenido principal */
+  .main-content {
+    flex: 1;
+    padding: 20px;
+  }
+  
+  /* Filtros de búsqueda */
+  .filters {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #fdfdfd;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  }
+  
+  .filter-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  
+  .filter-input,
+  .filter-select {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    background-color: #fff;
+    font-size: 14px;
+    transition: all 0.2s ease;
+  }
+  
+  .filter-input:focus,
+  .filter-select:focus {
+    border-color: #7a42f4;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(122, 66, 244, 0.2);
+  }
+  .filter-item label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    color: #333;
+  }
+  
+  .filter-item input[type="checkbox"] {
+    transform: scale(1.1);
+    accent-color: #7a42f4;
+  }
+  
+  
+  /* Resumen de estadísticas */
+  .stats-summary {
+    margin-top: 20px;
+  }
+  
+  /* Galería de Cards */
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+  }
+  
+  /* Card - Contenedor */
+  .card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px); /* Efecto de movimiento */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Sombra más prominente */
+  }
+  
+  /* Contenedor de la imagen */
+  .card-image-container {
+    position: relative; /* Permite colocar el título dentro de la imagen */
+    width: 100%;
+    height: 199px;
+    overflow: hidden;
+    border-bottom: 2px solid #BDC3C7;
+    margin-bottom: -10px;
+  }
+
+  .icon-buttons {
+    position: absolute; /* Lo posicionamos absolutamente dentro del contenedor */
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 10px;
+    /* Para asegurarse de que se muestren encima de otros elementos */
+  }
+  
+  .edit-icon{
+    cursor: pointer;
+    font-size: 20px; /* Tamaño adecuado */
+    color: #ffffff; /* Color del ícono */
+    padding: 8px; /* Espaciado alrededor del ícono */
+    border: 2px solid #ffffff; /* Borde verde alrededor del ícono */
+    border-radius: 50%; /* Hacer el borde redondeado */
+    background-color: #1900ff; /* Fondo blanco para resaltar el ícono */
+    transition: all 0.3s ease; /* Suaviza las transiciones cuando interactúas */
+
+  } .delete-icon {
+    cursor: pointer;
+    font-size: 20px; /* Tamaño adecuado */
+    color: #ffffff; /* Color del ícono */
+    padding: 8px; /* Espaciado alrededor del ícono */
+    border: 2px solid #ffffff; /* Borde verde alrededor del ícono */
+    border-radius: 50%; /* Hacer el borde redondeado */
+    background-color: #ff0000; /* Fondo blanco para resaltar el ícono */
+    transition: all 0.3s ease; /* Suaviza las transiciones cuando interactúas */
+  }
+  .edit-icon:hover, .delete-icon:hover {
+    color: #fff; /* Cambiar color del ícono al hacer hover */
+    background-color: #07f507; /* Fondo verde cuando pasa el mouse */
+    border-color: #07f507; /* Borde verde más marcado */
+  }
+  
+  /* Imagen de la Card */
+  .card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .card-image-container iframe,
+  .card-image-container .carousel-clase,
+  .card-image-container video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+
+  }
+  
+  /* Título de la Card */
+  .card-title {
+    position: absolute;
+    bottom: 10px;
+    left: 15px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #2C3E50;
+    margin: 0;
+    line-height: 1.2;
+    background-color: rgba(255, 255, 255, 0.7); /* Fondo semitransparente */
+    padding: 5px;
+    border-radius: 5px;
+  }
+
+
+
+
+/* Posicionar los íconos a la derecha y alineados */
+.card-details .heart-icon{
+  position: absolute;
+
+  top: 10px;
+  font-size: 1.6rem;
+  color: #928585; /* Color por defecto */
+  background-color: #fff;
+  padding: 4px;
+  border-radius: 50%;
+
+}
+.card-details .view-icon {
+  position: absolute;
+  top: 10px;
+  font-size: 1.6rem;
+  color: #080808; /* Color por defecto */
+  background-color: #fff;
+  padding: 4px;
+  border-radius: 50%;
+}
+
+.card-details .view-icon {
+  right: 60px;  /* Ajusta la distancia del ojo respecto al corazón */
+
+}
+
+/* Posicionar el ícono de compartir */
+.card-details .share-icon {
+  position: absolute;
+  top: 10px;
+  right: 120px;  /* Ajusta la distancia a la derecha */
+  font-size: 1.6rem;
+  color: #091dd3; /* Color por defecto */
+  background-color: #fff;
+  padding: 4px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: color 0.3s ease, background-color 0.3s ease;
+ 
+}
+
+/* Hover para compartir */
+.card-details .share-icon:hover {
+  color: #3498db;  /* Color azul al pasar el mouse */
+  background-color: #f0f0f0;  /* Fondo gris claro al pasar el mouse */
+}
+
+
+
+.card-details .heart-icon {
+  right: 10px;
+}
+
+/* Cambiar el color del corazón cuando es 'liked' */
+.card-details .heart-icon.liked {
+  color: #e74c3c;  /* Rojo */
+  background-color: transparent;
+}
+
+
+  
+
+
+  
+  /* Detalles de la Card */
+  .card-details {
+    position: relative;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: auto;
+    gap: 5px;
+  }
+
+
+
+
+/* Hover: mantenemos el borde y fondo, y damos feedback “pop” */
+.card-details .heart-icon:hover {
+  animation: pop-heart 0.35s ease;
+}
+
+/* Estado “liked”: corazón rojo, sin borde */
+.card-details .heart-icon.liked {
+  color: #e74c3c;                 /* Rojo Instagram */
+  background-color: transparent;  
+  border-color: transparent;
+  animation: pop-heart 0.35s ease;
+}
+
+/* Menú de compartir flotante */
+.share-menu {
+  position: absolute;
+  top: 13px;
+  right: 153px;
+  display: flex;
+  flex-direction: row;
+  background-color: transparent; /* Sin fondo */
+  padding: 0;                     /* Sin padding */
+  border-radius: 0;              /* Sin bordes redondeados */
+  gap: 5px;                      /* Espacio entre iconos */
+  z-index: 5;
+  box-shadow: none;              /* Sin sombra */
+}
+
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.8rem;
+}
+
+.solicitud-card {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+  padding: 0.75rem;
+  font-size: 0.9rem;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.solicitud-card:hover {
+  transform: scale(1.01);
+}
+
+.estado-aprobado {
+  background-color: #d4edda; /* verde pastel */
+}
+
+.estado-rechazado {
+  background-color: #f8d7da; /* rojo pastel */
+}
+
+.acciones {
+  margin-top: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn-aprobar,
+.btn-rechazar {
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-aprobar {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.btn-rechazar {
+  background-color: #f44336;
+  color: white;
+}
+
+.btn-aprobar:hover,
+.btn-rechazar:hover {
+  opacity: 0.85;
+}
+
+
+/* Animación: flotar hacia arriba, crecer y desvanecer */
+@keyframes float-heart {
+  0% {
+    transform: translateY(0) scale(0.5);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-20px) scale(1.2);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-50px) scale(1);
+    opacity: 0;
+  }
+}
+
+  
+  /* Descripción de la Card */
+  .card-description {
+    font-size: 14px;
+    color: #7F8C8D;
+    margin-bottom: 10px;
+    line-height: 1.3;
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  /* Precio de la Card */
+  .card-price {
+    font-size: 16px;
+    font-weight: bold;
+    color: #1ABC9C;
+    margin-bottom: 0px;
+    line-height: 0;
+  }
+  
+  /* Ubicación de la Card */
+  .card-location {
+    font-size: 14px;  /* Ajusta el tamaño del ícono */
+    color: #BDC3C7;   /* Color del ícono */
+    margin-bottom: 0px;  /* Espacio inferior */
+    display: flex;
+    align-items: center;  /* Alinea el ícono verticalmente */
+    font-style: italic;
+  }
+  .card-location i {
+    margin-right: 5px; /* Espacio entre el ícono y la ubicación */
+  }
+  
+  /* Estado de la Card */
+  .card-estado {
+    font-size: 14px;
+    color: #BDC3C7;
+    margin-bottom: 0px;
+    font-style: italic;
+    line-height: 0;
+  }
+  
+  /* Vendedor de la Card */
+  .card-vendedor {
+    font-size: 14px;
+    color: #BDC3C7;
+    margin-bottom: 3px;
+    font-style: italic;
+    line-height: 1.2;
+  }
+  
+  /* Botón de la Card */
+  .card-button {
+    background-color: #1ABC9C;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 25px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: center;
+  }
+  
+  .card-button:hover {
+    background-color: #81dd08;
+  }
+  
+  /* Pie de la Card - Información adicional */
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+  }
+  
+  /* Vendor de la Card */
+  .card-footer .card-vendor {
+    font-weight: 600;
+    color: #2C3E50;
+    font-size: 14px;
+  }
+  
+  /* Información adicional del footer */
+  .card-footer p {
+    font-size: 12px;
+    color: #BDC3C7;
+  }
+  
+  
+  /* Estilo del botón "¿Quieres vender?" */
+  .sell-button {
+    background-color: #eeeeee;
+    color: rgb(33, 47, 75);
+    padding: 12px 20px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 15px;
+  }
+  
+  .sell-button:hover {
+    background-color:  #34495E;
+    color: #f9f9f9
+    ;
+  }
+  
+  
+  /* Estilo del formulario de venta */
+  .sell-form-container {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+  }
+  
+  .sell-form h3 {
+    font-size: 22px;
+    margin-bottom: 15px;
+  }
+  
+  .sell-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
+  
+  .sell-form input,
+  .sell-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #BDC3C7;
+  }
+  
+  .sell-form-submit {
+    background-color: #1ABC9C;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .sell-form-submit:hover {
+    background-color: #16A085;
+  }
+  
+  .sidebar-toggle {
+    margin-top: 1px;
+    display: none;}
+/* Media Queries para Responsividad */
+
+ .add-button{
+  margin-top: 2px;
+ }
+
+ /* Estilos del formulario de confirmación */
+.confirm-form {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  z-index: 1000;
+}
+
+/* Botones del formulario de confirmación */
+.confirm-form button {
+  margin: 10px;
+  padding: 10px 20px;
+  background-color: #ff0000;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.confirm-form button:hover {
+  background-color: #cc0000;
+}
+
+.confirm-form button:focus {
+  outline: none;
+}
+
+ 
+
+/* Para pantallas pequeñas (móviles) */
+@media (max-width: 599px) {
+    /* Barra lateral (sidebar) */    /* Barra lateral (sidebar) */
+
+    .share-menu {
+      position: absolute;
+      top: 28px;
+      right: 153px;
+      display: flex;
+      flex-direction: row;
+      background-color: transparent; /* Sin fondo */
+      padding: 0;                     /* Sin padding */
+      border-radius: 0;              /* Sin bordes redondeados */
+      gap: 5px;                      /* Espacio entre iconos */
+      z-index: 5;
+      box-shadow: none;              /* Sin sombra */
+    }
+
+    
+
+    .card-image-container {
+      position: relative; /* Permite colocar el título dentro de la imagen */
+      width: 100%;
+      height: 249px;
+      overflow: hidden;
+      border-bottom: 2px solid #BDC3C7;
+      margin-bottom: -10px;
+    }
+    
+      /* Imagen de la Card */
+    .card-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  
+
+    
+    .card-image-container iframe,
+    .card-image-container .carousel-clase,
+    .card-image-container video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+
+    }
+
+    
+
+    
+
+
+
+    .sidebar {
+      overflow-x: scroll;
+      white-space: nowrap; /* <- Clave para que el contenido no se baje a otra línea */
+      width: 100%; /* Ocupa todo el ancho de la pantalla */
+      position: fixed; /* Fija la barra lateral en la parte superior */
+      top: 0px; /* Ajuste para que no tape el header */
+      left: 0;
+      height: auto; /* La altura es automática dependiendo del contenido */
+      background-color: #0c9790;
+      color: white;
+      padding: 10px 15px;
+      z-index: 1000;
+      transition: transform 0.3s ease-in-out;
+      display: none; /* Inicialmente está oculta */
+  }
+
+  .sidebar::-webkit-scrollbar {
+    height: 6px;
+  }
+  
+  .sidebar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .sidebar::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.3); /* Blanco translúcido */
+    border-radius: 10px;
+  }
+
+  /* Barra lateral activa */
+    .sidebar.active {
+        display: block; /* Aparece cuando se activa */
+    }
+
+    /* Estilos cuando la sidebar tiene la clase 'active' */
+
+  
+    /* Botón para abrir y cerrar la barra lateral */
+    .sidebar-toggle {
+    
+      display: block;
+      background-color: hsl(187, 89%, 51%);
+      color: rgb(255, 255, 255);
+      border: none;
+      padding: 10px;
+      font-size: 18px;
+      cursor: pointer;
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 1001;
+      height: auto;
+
+
+    }
+  
+    /* Contenedor de las categorías */
+    .categories {
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+      padding: 10px 0;
+      flex-wrap: nowrap;
+
+      
+    }
+
+    .categories::before {
+      content: "";
+      display: inline-block;
+      min-width: 35px; /* o el espacio necesario */
+    }
+  
+
+    
+    .categories::after {
+      content: "";
+      display: inline-block;
+      min-width: 35px; /* o el espacio necesario */
+    }
+  
+
+  
+    /* Estilo de los botones de categoría */
+    .category-btn {
+        background-color: #1fcac2;
+        color: white;
+        border: none;
+        padding: 8px 15px;  /* Botones más pequeños */
+        font-size: 12px;  /* Tamaño de fuente reducido */
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+        text-align: center;
+    }
+  
+    /* Estilo de los botones cuando están activos */
+    .category-btn.active {
+        background-color: #34495E;
+    }
+  
+    /* Estilo de los botones cuando están en hover */
+    .category-btn:hover {
+        background-color: #293a4b;
+    }
+  
+
+  
+  
+  /* Filtros de búsqueda */
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+  
+    .filter-item {
+      flex: 1;
+    }
+  
+    .filter-input, .filter-select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #BDC3C7;
+    }
+  
+    .filter-select {
+      background-color: #f0f0f0;
+    }
+  
+    /* Resumen de estadísticas */
+    .stats-summary {
+      margin-top: 20px;
+    }
+  
+
+}
+
+
+
+
+/* Para tabletas (entre 768px y 1024px) */
+@media (max-width: 950px) and (min-width: 600px) {
+
+    /* Barra lateral (sidebar) */
+    .sidebar {
+      overflow-x: scroll;
+      white-space: nowrap; /* <- Clave para que el contenido no se baje a otra línea */
+      width: 20%; /* Ocupa todo el ancho de la pantalla */
+      position: fixed; /* Fija la barra lateral en la parte superior */
+      top: 20px; /* Ajuste para que no tape el header */
+      left: 0;
+      height: auto; /* La altura es automática dependiendo del contenido */
+      background-color: #0c9790;
+      color: white;
+      padding: 10px 15px;
+      z-index: 1000;
+      transition: transform 0.3s ease-in-out;
+      display: none; /* Inicialmente está oculta */
+  }
+
+  /* Barra lateral activa */
+  .sidebar.active {
+      display: block; /* Aparece cuando se activa */
+  }
+
+  /* Botón para abrir y cerrar la barra lateral */
+  .sidebar-toggle {
+    display: block;
+    background-color: #1fcac2;
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 18px;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 1001;
+  }
+
+  /* Contenedor de las categorías */
+  .categories {
+    max-width: 500vh;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    padding: 10px 0;
+    flex-wrap: nowrap;
+  }
+
+  /* Estilo de los botones de categoría */
+  .category-btn {
+      background-color: #1fcac2;
+      color: white;
+      border: none;
+      padding: 8px 15px;  /* Botones más pequeños */
+      font-size: 12px;  /* Tamaño de fuente reducido */
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+      text-align: center;
+  }
+
+  /* Estilo de los botones cuando están activos */
+  .category-btn.active {
+      background-color: #34495E;
+  }
+
+  /* Estilo de los botones cuando están en hover */
+  .category-btn:hover {
+      background-color: #293a4b;
+  }
+
+/* Filtros de búsqueda */
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .filter-item {
+    flex: 1;
+  }
+
+  .filter-input, .filter-select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #BDC3C7;
+  }
+
+  .filter-select {
+    background-color: #f0f0f0;
+  }
+
+  /* Resumen de estadísticas */
+  .stats-summary {
+    margin-top: 20px;
+  }
+
+  /* Galería de Cards */
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 3fr));
+    gap: 30px;
+    margin-top: 30px;
+  }
+}
+
+/* corazones del “burst” */
+.burst-heart {
+  width: 14px;
+  height: 14px;
+  background-image: url("data:image/svg+xml;charset=UTF-8,\
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 29.6'>\
+<path fill='%23e74c3c' d='M23.6,0C20.9,0,18.4,1.4,16,3.7C13.6,1.4,11.1,0,8.4,0\
+C3.8,0,0,3.8,0,8.4c0,4.9,4.2,8.9,10.6,14.7L16,29.6l5.4-6.5\
+C27.8,17.3,32,13.3,32,8.4C32,3.8,28.2,0,23.6,0z'/>\
+</svg>");
+  background-size: contain;
+  background-repeat: no-repeat;
+  pointer-events: none;   /* que no interfieran con clicks */
+}
