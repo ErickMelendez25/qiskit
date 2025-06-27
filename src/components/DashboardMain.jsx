@@ -19,7 +19,7 @@ const DashboardQiskit = () => {
   const [resultadoModelo, setResultadoModelo] = useState(null);
   const [showMap, setShowMap] = useState(false);
 
-  const API_BASE = 'http://localhost:5000/api';
+  const API_BASE = 'https://qiskit-production.up.railway.app/api';
 
   // Obtener zonas al montar
   useEffect(() => {

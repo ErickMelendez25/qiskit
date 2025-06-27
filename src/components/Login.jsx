@@ -32,7 +32,7 @@ const Login = () => {
     try {
       // Verifica si estás en producción (Railway) o en desarrollo (localhost)
       const apiUrl = process.env.NODE_ENV === 'production' 
-      ? 'https://sateliterrreno-production.up.railway.app/login' 
+      ? 'hhttps://qiskit-production.up.railway.app/login' 
       : 'http://localhost:5000/login';
 
       console.log("API URL:", apiUrl);  // Verifica si la URL es correcta
@@ -61,7 +61,7 @@ const Login = () => {
     try {
       // Verifica si estás en producción (Railway) o en desarrollo (localhost)
       const apiUrl = process.env.NODE_ENV === 'production' 
-      ? 'https://sateliterrreno-production.up.railway.app/api/terrenos' 
+      ? 'https://qiskit-production.up.railway.app/api/terrenos' 
       : 'http://localhost:5173/api/terrenos';
 
       const response = await axios.get(apiUrl, {
@@ -94,7 +94,7 @@ const Login = () => {
   
       // URL directa al endpoint sin "/api"
       const apiUrl = process.env.NODE_ENV === 'production'
-        ? 'https://sateliterrreno-production.up.railway.app'
+        ? 'https://qiskit-production.up.railway.app'
         : 'http://localhost:5000';
   
       // Enviar datos al backend

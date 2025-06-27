@@ -163,7 +163,7 @@ const __dirname = path.resolve();  // Obtener la ruta del directorio actual (cor
 
 // Configura CORS para permitir solicitudes solo desde tu frontend
 const corsOptions = {
-  origin: ['https://sateliterrreno-production.up.railway.app', 'http://localhost:5173', 'https://qiskit.academionlinegpt.com','http://localhost:5000'],
+  origin: ['https://qiskit-production.up.railway.app', 'http://localhost:5173', 'https://qiskit.academionlinegpt.com','http://localhost:5000'],
   methods: 'GET, POST, PUT, DELETE',
   allowedHeaders: 'Content-Type, Authorization',
 };
