@@ -19,11 +19,13 @@ const DashboardQiskit = () => {
   const [resultadoModelo, setResultadoModelo] = useState(null);
   const [showMap, setShowMap] = useState(false);
 
-  const API_BASE = 'https://qiskit-production.up.railway.app/api';
+  const API_BACKEND = 'https://qiskit-production.up.railway.app/api';
+  const API_QISKIT = 'https://microservicioqiskit-production.up.railway.app';
+
 
   // Obtener zonas al montar
   useEffect(() => {
-    fetch(`${API_BASE}/zonas`)
+    fetch(`${API_BACKEND}/zonas`)
       .then(res => res.json())
       .then(data => {
         setZonas(data);
@@ -45,7 +47,7 @@ const DashboardQiskit = () => {
 
   const fetchLecturas = async (zId) => {
     try {
-      const res = await fetch(`${API_BASE}/zonas/${zId}/ultimas-lecturas`);
+      const res = await fetch(`${API_BACKEND}/zonas/${zId}/ultimas-lecturas`);
       const data = await res.json();
       setLecturas(data);
     } catch (error) {
@@ -58,19 +60,19 @@ const DashboardQiskit = () => {
     if (zonaId === null) return;
 
     try {
-      const res = await fetch(`https://microservicioqiskit-production.up.railway.app/ejecutarmodelo`, {
+      const res = await fetch(`${API_QISKIT}/ejecutarmodelo`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ zona_id: zonaId }) // ¡solo eso!
+        body: JSON.stringify({ zona_id: zonaId })
       });
 
       const data = await res.json();
-
-      setResultadoModelo(data); // el resultado ya es el objeto completo, no viene dentro de `.resultado`
+      setResultadoModelo(data);
     } catch (error) {
       console.error('Error al ejecutar modelo:', error);
     }
   };
+
 
 
   const sensores = [
