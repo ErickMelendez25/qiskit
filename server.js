@@ -349,39 +349,7 @@ app.get('/api/modelos', (req, res) => {
 
 
 // Ejecutar modelo cuántico (ejecuta script Python con Qiskit)
-app.post('/api/ejecutarmodelo', (req, res) => {
-  const zona_id = req.body.zona_id;
 
-
-  const pythonProcess = spawn('python', ['quantum_kmeans_model.py', zona_id]);
-
-  let result = '';
-  let errorOutput = '';
-
-  pythonProcess.stdout.on('data', (data) => {
-    result += data.toString();
-    console.log('STDOUT:', data.toString());
-  });
-
-  pythonProcess.stderr.on('data', (data) => {
-    errorOutput += data.toString();
-    console.error('STDERR:', data.toString());
-  });
-
-  pythonProcess.on('close', (code) => {
-    console.log(`Python script finished with code ${code}`);
-    if (code !== 0) {
-      return res.status(500).json({ error: 'Error al ejecutar el modelo', detalles: errorOutput });
-    }
-    try {
-      const parsed = JSON.parse(result);
-      res.json({ resultado: parsed });
-    } catch (e) {
-      console.error('❌ Error al parsear JSON:', e);
-      return res.status(500).json({ error: 'Error al parsear salida del modelo', detalles: result });
-    }
-  });
-});
 
 
 // Endpoint de autenticación con Google

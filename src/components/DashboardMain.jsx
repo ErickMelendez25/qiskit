@@ -56,18 +56,22 @@ const DashboardQiskit = () => {
 
   const ejecutarModelo = async () => {
     if (zonaId === null) return;
+
     try {
-      const res = await fetch(`${API_BASE}/ejecutarmodelo`, {
+      const res = await fetch(`https://microservicioqiskit-production.up.railway.app/ejecutarmodelo`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ modelo_id: 1, zona_id: zonaId, ejecutado_por: 'admin' })
+        body: JSON.stringify({ zona_id: zonaId }) // ¡solo eso!
       });
+
       const data = await res.json();
-      setResultadoModelo(data.resultado);
+
+      setResultadoModelo(data); // el resultado ya es el objeto completo, no viene dentro de `.resultado`
     } catch (error) {
       console.error('Error al ejecutar modelo:', error);
     }
   };
+
 
   const sensores = [
     { tipo: 'temperatura', titulo: 'Temperatura (°C)', color: '#f87171' },
