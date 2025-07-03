@@ -308,69 +308,53 @@ useEffect(() => {
         </button>
       </div>
 
-      {resultadoModelo && (
-        <div className="result-card">
-          <h3>Resultado de Quantum KMeans</h3>
-          <table className="resultado-tabla">
-            <thead>
-              <tr>
-                <th>#</th>
-                {resultadoModelo.tipos.map((tipo, i) => (
-                  <th key={i}>{tipo}</th>
-                ))}
-                <th>Cluster</th>
-              </tr>
-            </thead>
-            <tbody>
-              {resultadoModelo.clusters.map((cluster, idx) => (
-                <tr key={idx}>
-                  <td>{idx + 1}</td>
-                  {resultadoModelo.valores[idx].map((valor, i) => (
-                    <td key={i}>{valor.toFixed(2)}</td>
-                  ))}
-                  <td>{cluster}</td>
-                </tr>
+ {resultadoModelo ? (
+  <div className="result-card">
+    <h3>Resultado de Quantum KMeans</h3>
+
+    {Array.isArray(resultadoModelo.tipos) &&
+     Array.isArray(resultadoModelo.clusters) &&
+     Array.isArray(resultadoModelo.valores) &&
+     resultadoModelo.clusters.length > 0 ? (
+      <table className="resultado-tabla">
+        <thead>
+          <tr>
+            <th>#</th>
+            {resultadoModelo.tipos.map((tipo, i) => (
+              <th key={i}>{tipo}</th>
+            ))}
+            <th>Cluster</th>
+          </tr>
+        </thead>
+        <tbody>
+          {resultadoModelo.clusters.map((cluster, idx) => (
+            <tr key={idx}>
+              <td>{idx + 1}</td>
+              {resultadoModelo.valores[idx].map((valor, i) => (
+                <td key={i}>{Number(valor).toFixed(2)}</td>
               ))}
-            </tbody>
-          </table>
-        </div>
-
-        
-      )}
-
-    {resultadoModelo?.imagenes && (
-      <div className="result-images">
-        <h3>Visualización Cuántica</h3>
-        <div className="grafico-img-container">
-          <div>
-            <p>Gráfico de Clusters</p>
-            <img
-              src={`${API_QISKIT}${resultadoModelo.imagenes.clusters}`}
-              alt="Clustering Cuántico"
-              className="grafico-img"
-            />
-          </div>
-          <div>
-            <p>Matriz de Similaridad (Kernel Cuántico)</p>
-            <img
-              src={`${API_QISKIT}${resultadoModelo.imagenes.kernel}`}
-              alt="Matriz Kernel Cuántico"
-              className="grafico-img"
-            />
-          </div>
-        </div>
-
-        {/* Interpretación textual del modelo cuántico */}
-        {interpretacion && (
-          <div className="interpretacion-card">
-            <h3>🧠 Interpretación del Modelo Cuántico</h3>
-            <p style={{ whiteSpace: 'pre-wrap', background: '#f9f9f9', padding: '1rem', borderRadius: '8px' }}>
-              {interpretacion}
-            </p>
-          </div>
-        )}
+              <td>{cluster}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    ) : (
+      <div className="no-data">
+        <p style={{ padding: '1rem', background: '#fff3cd', border: '1px solid #ffeeba', borderRadius: '8px' }}>
+          ⚠️ No se encontraron resultados para esta zona. Por favor, verifica que existan datos válidos o intenta con otra zona.
+        </p>
       </div>
     )}
+  </div>
+) : (
+  <div className="result-card">
+    <h3>Resultado de Quantum KMeans</h3>
+    <p style={{ padding: '1rem', background: '#e9ecef', borderRadius: '8px' }}>
+      Aún no se ha ejecutado el modelo. Pulsa el botón para ver los resultados.
+    </p>
+  </div>
+)}
+
 
     </div>
   );
