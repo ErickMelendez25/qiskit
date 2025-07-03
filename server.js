@@ -15,7 +15,11 @@ import { spawn } from 'child_process';
 
 
 
-dotenv.config(); // Carga las variables de entorno desde el archivo .env
+dotenv.config({ path: './.env', override: true });
+console.log('🔧 DB_HOST:', process.env.DB_HOST);
+console.log('🔧 DB_PORT:', process.env.DB_PORT);
+console.log('🔧 DB_USER:', process.env.DB_USER);
+console.log('🔧 DB_NAME:', process.env.DB_NAME);
 
 //para la conexion con arduino
 import { SerialPort } from 'serialport';
@@ -141,7 +145,7 @@ const __dirname = path.resolve();  // Obtener la ruta del directorio actual (cor
 
 // Configura CORS para permitir solicitudes solo desde tu frontend
 const corsOptions = {
-  origin: ['https://qiskit-production.up.railway.app', 'http://localhost:5173', 'https://qiskit.academionlinegpt.com','http://localhost:5000'],
+  origin: ['https://qiskit-production.up.railway.app', 'http://localhost:5173', 'https://qiskit.academionlinegpt.com','http://localhost:5000','http://localhost:8000'],
   methods: 'GET, POST, PUT, DELETE',
   allowedHeaders: 'Content-Type, Authorization',
 };
@@ -171,21 +175,18 @@ const upload = multer({ storage: storage });
 
 app.use('/terrenos', express.static(terrenosDirectory)); // Servir archivos estáticos desde 'uploads'
 
-console.log("HOST:", process.env.DB_HOST);
-console.log("PORT:", process.env.DB_PORT);
-console.log("USER:", process.env.DB_USER);
-console.log("NAME:", process.env.DB_NAME);
+
 
 // Configuración de la base de datos
 const db = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
+  host:     process.env.DB_HOST,
+  user:     process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
   database: process.env.DB_NAME,
-  connectionLimit: 10,
+  port:     Number(process.env.DB_PORT),
   waitForConnections: true,
-  queueLimit: 0,
+  connectionLimit:    10,
+  queueLimit:         0,
 });
 
 // Verificar la conexión a la base de datos
@@ -238,12 +239,33 @@ io.on('connection', (socket) => {
 
 
 // API: Zonas agrícolas
+// Traer zonas incluyendo región, provincia y distrito
+// API: Zonas agrícolas con IDs completos
 app.get('/api/zonas', (req, res) => {
-  db.query('SELECT * FROM zonas_agricolas', (err, rows) => {
-    if (err) return res.status(500).json({ message: 'Error al consultar zonas' });
+  const sql = `
+    SELECT 
+      z.*,
+      d.id AS distrito_id,
+      d.nombre AS distrito,
+      p.id AS provincia_id,
+      p.nombre AS provincia,
+      r.id AS region_id,
+      r.nombre AS region
+    FROM zonas_agricolas z
+    LEFT JOIN distritos d ON z.distrito_id = d.id
+    LEFT JOIN provincias p ON d.provincia_id = p.id
+    LEFT JOIN regiones r ON p.region_id = r.id
+  `;
+
+  db.query(sql, (err, rows) => {
+    if (err) {
+      console.error('Error al consultar zonas:', err);
+      return res.status(500).json({ message: 'Error al consultar zonas' });
+    }
     res.json(rows);
   });
 });
+
 
 app.get('/api/zonas/:id', (req, res) => {
   const { id } = req.params;
@@ -334,6 +356,41 @@ app.get('/api/zonas/:zona_id/ultimas-lecturas', (req, res) => {
     }
     res.json(rows);
   });
+});
+
+
+
+//////
+// API: Listar regiones
+app.get('/api/regiones', (req, res) => {
+  db.query('SELECT id, nombre FROM regiones ORDER BY nombre', (err, rows) => {
+    if (err) return res.status(500).json({ message: 'Error al consultar regiones' });
+    res.json(rows);
+  });
+});
+
+// API: Listar provincias por región
+app.get('/api/provincias/:region_id', (req, res) => {
+  db.query(
+    'SELECT id, nombre FROM provincias WHERE region_id = ? ORDER BY nombre',
+    [req.params.region_id],
+    (err, rows) => {
+      if (err) return res.status(500).json({ message: 'Error al consultar provincias' });
+      res.json(rows);
+    }
+  );
+});
+
+// API: Listar distritos por provincia
+app.get('/api/distritos/:provincia_id', (req, res) => {
+  db.query(
+    'SELECT id, nombre FROM distritos WHERE provincia_id = ? ORDER BY nombre',
+    [req.params.provincia_id],
+    (err, rows) => {
+      if (err) return res.status(500).json({ message: 'Error al consultar distritos' });
+      res.json(rows);
+    }
+  );
 });
 
 

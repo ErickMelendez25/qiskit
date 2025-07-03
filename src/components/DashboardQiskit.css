@@ -116,3 +116,23 @@
 .map-wrapper {
   margin-bottom: 1.5rem;
 }
+
+
+.result-images {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.grafico-img-container {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.grafico-img {
+  max-width: 400px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+}
