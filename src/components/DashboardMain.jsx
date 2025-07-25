@@ -30,6 +30,11 @@ const DashboardQiskit = () => {
 
   const [interpretacion, setInterpretacion] = useState('');
 
+  const cultivoRecomendado = interpretacion
+  .split('\n')
+  .find(line => line.includes('✅ Recomendado'));
+
+
 
 
 
@@ -109,7 +114,7 @@ useEffect(() => {
     if (zonaId === null) return;
 
     try {
-      const res = await fetch(`${API_QISKIT}/ejecutarmodelo`, {
+      const res = await fetch(`${API_QISKIT}/ejecut`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ zona_id: zonaId })
@@ -308,35 +313,91 @@ useEffect(() => {
         </button>
       </div>
 
- {resultadoModelo ? (
-  <div className="result-card">
-    <h3>Resultado de Quantum KMeans</h3>
+      {resultadoModelo ? (
+        <div className="result-card">
+          <h3>Resultado de Quantum KMeans</h3>
 
-    {Array.isArray(resultadoModelo.tipos) &&
-     Array.isArray(resultadoModelo.clusters) &&
-     Array.isArray(resultadoModelo.valores) &&
-     resultadoModelo.clusters.length > 0 ? (
-      <table className="resultado-tabla">
-        <thead>
-          <tr>
-            <th>#</th>
-            {resultadoModelo.tipos.map((tipo, i) => (
-              <th key={i}>{tipo}</th>
-            ))}
-            <th>Cluster</th>
-          </tr>
-        </thead>
-        <tbody>
-          {resultadoModelo.clusters.map((cluster, idx) => (
-            <tr key={idx}>
-              <td>{idx + 1}</td>
-              {resultadoModelo.valores[idx].map((valor, i) => (
-                <td key={i}>{Number(valor).toFixed(2)}</td>
-              ))}
-              <td>{cluster}</td>
-            </tr>
-          ))}
-        </tbody>
+          {Array.isArray(resultadoModelo.tipos) &&
+          Array.isArray(resultadoModelo.clusters) &&
+          Array.isArray(resultadoModelo.valores) &&
+          resultadoModelo.clusters.length > 0 ? (
+            <table className="resultado-tabla">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  {resultadoModelo.tipos.map((tipo, i) => (
+                    <th key={i}>{tipo}</th>
+                  ))}
+                  <th>Cluster</th>
+                </tr>
+              </thead>
+              <tbody>
+                {resultadoModelo.clusters.map((cluster, idx) => (
+                  <tr key={idx}>
+                    <td>{idx + 1}</td>
+                    {resultadoModelo.valores[idx].map((valor, i) => (
+                      <td key={i}>{Number(valor).toFixed(2)}</td>
+                    ))}
+                    <td>{cluster}</td>
+                  </tr>
+                ))}
+              </tbody>
+              
+          {resultadoModelo.imagenes?.clusters && (
+            <div className="graficos-container">
+              <div className="grafico-box">
+                <h5>Gráfico de Clústeres</h5>
+                <img
+                  className="grafico-img"
+                  src={`https://microservicioqiskit-production.up.railway.app${resultadoModelo.imagenes.clusters}`}
+                  alt="Cluster"
+                />
+              </div>
+
+              <div className="grafico-box">
+                <h5>Matriz Kernel</h5>
+                <img
+                  className="grafico-img"
+                  src={`https://microservicioqiskit-production.up.railway.app${resultadoModelo.imagenes.kernel}`}
+                  alt="Kernel"
+                />
+              </div>
+            </div>
+          )}
+          <div className="graficos-container">
+          <div className="grafico-box">
+                <h5>Mapa de Calor</h5>
+                <img
+                  className="grafico-img"
+                  src={`https://microservicioqiskit-production.up.railway.app${resultadoModelo.imagenes.heatmap}`}
+                  alt="Heatmap"
+                />
+              </div>
+
+              <div className="grafico-box">
+                <h5>Matriz de Confusión</h5>
+                <img
+                  className="grafico-img"
+                  src={`https://microservicioqiskit-production.up.railway.app${resultadoModelo.imagenes.confusion}`}
+                  alt="Matriz Confusión"
+                />
+              </div>
+              
+            </div>
+
+                {interpretacion && (
+                <div className="interpretacion-box">
+
+                  <pre>{interpretacion}</pre>
+                </div>
+              )}
+
+              {cultivoRecomendado && (
+                <div className="cultivo-recomendado-box">
+                  🌱 <strong>Cultivo recomendado:</strong> {cultivoRecomendado}
+                </div>
+              )}
+
       </table>
     ) : (
       <div className="no-data">
@@ -352,6 +413,7 @@ useEffect(() => {
     <p style={{ padding: '1rem', background: '#e9ecef', borderRadius: '8px' }}>
       Aún no se ha ejecutado el modelo. Pulsa el botón para ver los resultados.
     </p>
+
   </div>
 )}
 
