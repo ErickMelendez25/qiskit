@@ -378,7 +378,12 @@ useEffect(() => {
             />
           </div>
 
-          <div className="grafico-box">
+
+        </div>
+
+        <div className="graficos-container">
+
+           <div className="grafico-box">
             <h5>Matriz de Confusión</h5>
             <img
               className="grafico-img"
@@ -386,6 +391,7 @@ useEffect(() => {
               alt="Matriz Confusión"
             />
           </div>
+
         </div>
 
         {interpretacion && (
