@@ -313,95 +313,103 @@ useEffect(() => {
         </button>
       </div>
 
-      {resultadoModelo ? (
-        <div className="result-card">
-          <h3>Resultado de Quantum KMeans</h3>
+ {resultadoModelo ? (
+  <div className="result-card">
+    <h3>Resultado de Quantum KMeans</h3>
 
-          {Array.isArray(resultadoModelo.tipos) &&
-          Array.isArray(resultadoModelo.clusters) &&
-          Array.isArray(resultadoModelo.valores) &&
-          resultadoModelo.clusters.length > 0 ? (
-            <table className="resultado-tabla">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  {resultadoModelo.tipos.map((tipo, i) => (
-                    <th key={i}>{tipo}</th>
-                  ))}
-                  <th>Cluster</th>
-                </tr>
-              </thead>
-              <tbody>
-                {resultadoModelo.clusters.map((cluster, idx) => (
-                  <tr key={idx}>
-                    <td>{idx + 1}</td>
-                    {resultadoModelo.valores[idx].map((valor, i) => (
-                      <td key={i}>{Number(valor).toFixed(2)}</td>
-                    ))}
-                    <td>{cluster}</td>
-                  </tr>
+    {Array.isArray(resultadoModelo.tipos) &&
+    Array.isArray(resultadoModelo.clusters) &&
+    Array.isArray(resultadoModelo.valores) &&
+    resultadoModelo.clusters.length > 0 ? (
+      <>
+        <table className="resultado-tabla">
+          <thead>
+            <tr>
+              <th>#</th>
+              {resultadoModelo.tipos.map((tipo, i) => (
+                <th key={i}>{tipo}</th>
+              ))}
+              <th>Cluster</th>
+            </tr>
+          </thead>
+          <tbody>
+            {resultadoModelo.clusters.map((cluster, idx) => (
+              <tr key={idx}>
+                <td>{idx + 1}</td>
+                {resultadoModelo.valores[idx].map((valor, i) => (
+                  <td key={i}>{Number(valor).toFixed(2)}</td>
                 ))}
-              </tbody>
-              
-          {resultadoModelo.imagenes?.clusters && (
-            <div className="graficos-container">
-              <div className="grafico-box">
-                <h5>Gráfico de Clústeres</h5>
-                <img
-                  className="grafico-img"
-                  src={`https://microservicioqiskit-production.up.railway.app${resultadoModelo.imagenes.clusters}`}
-                  alt="Cluster"
-                />
-              </div>
+                <td>{cluster}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-              <div className="grafico-box">
-                <h5>Matriz Kernel</h5>
-                <img
-                  className="grafico-img"
-                  src={`https://microservicioqiskit-production.up.railway.app${resultadoModelo.imagenes.kernel}`}
-                  alt="Kernel"
-                />
-              </div>
-            </div>
-          )}
+        {/* 🔽 Secciones fuera del <table> 🔽 */}
+        {resultadoModelo.imagenes?.clusters && (
           <div className="graficos-container">
-          <div className="grafico-box">
-                <h5>Mapa de Calor</h5>
-                <img
-                  className="grafico-img"
-                  src={`https://microservicioqiskit-production.up.railway.app${resultadoModelo.imagenes.heatmap}`}
-                  alt="Heatmap"
-                />
-              </div>
-
-              <div className="grafico-box">
-                <h5>Matriz de Confusión</h5>
-                <img
-                  className="grafico-img"
-                  src={`https://microservicioqiskit-production.up.railway.app${resultadoModelo.imagenes.confusion}`}
-                  alt="Matriz Confusión"
-                />
-              </div>
-              
+            <div className="grafico-box">
+              <h5>Gráfico de Clústeres</h5>
+              <img
+                className="grafico-img"
+                src={`https://microservicioqiskit-production.up.railway.app${resultadoModelo.imagenes.clusters}`}
+                alt="Cluster"
+              />
             </div>
 
-                {interpretacion && (
-                <div className="interpretacion-box">
+            <div className="grafico-box">
+              <h5>Matriz Kernel</h5>
+              <img
+                className="grafico-img"
+                src={`https://microservicioqiskit-production.up.railway.app${resultadoModelo.imagenes.kernel}`}
+                alt="Kernel"
+              />
+            </div>
+          </div>
+        )}
 
-                  <pre>{interpretacion}</pre>
-                </div>
-              )}
+        <div className="graficos-container">
+          <div className="grafico-box">
+            <h5>Mapa de Calor</h5>
+            <img
+              className="grafico-img"
+              src={`https://microservicioqiskit-production.up.railway.app${resultadoModelo.imagenes.heatmap}`}
+              alt="Heatmap"
+            />
+          </div>
 
-              {cultivoRecomendado && (
-                <div className="cultivo-recomendado-box">
-                  🌱 <strong>Cultivo recomendado:</strong> {cultivoRecomendado}
-                </div>
-              )}
+          <div className="grafico-box">
+            <h5>Matriz de Confusión</h5>
+            <img
+              className="grafico-img"
+              src={`https://microservicioqiskit-production.up.railway.app${resultadoModelo.imagenes.confusion}`}
+              alt="Matriz Confusión"
+            />
+          </div>
+        </div>
 
-      </table>
+        {interpretacion && (
+          <div className="interpretacion-box">
+            <pre>{interpretacion}</pre>
+          </div>
+        )}
+
+        {cultivoRecomendado && (
+          <div className="cultivo-recomendado-box">
+            🌱 <strong>Cultivo recomendado:</strong> {cultivoRecomendado}
+          </div>
+        )}
+      </> // ✅ AQUÍ SÍ CIERRAS EL FRAGMENTO
     ) : (
       <div className="no-data">
-        <p style={{ padding: '1rem', background: '#fff3cd', border: '1px solid #ffeeba', borderRadius: '8px' }}>
+        <p
+          style={{
+            padding: '1rem',
+            background: '#fff3cd',
+            border: '1px solid #ffeeba',
+            borderRadius: '8px',
+          }}
+        >
           ⚠️ No se encontraron resultados para esta zona. Por favor, verifica que existan datos válidos o intenta con otra zona.
         </p>
       </div>
@@ -410,12 +418,18 @@ useEffect(() => {
 ) : (
   <div className="result-card">
     <h3>Resultado de Quantum KMeans</h3>
-    <p style={{ padding: '1rem', background: '#e9ecef', borderRadius: '8px' }}>
+    <p
+      style={{
+        padding: '1rem',
+        background: '#e9ecef',
+        borderRadius: '8px',
+      }}
+    >
       Aún no se ha ejecutado el modelo. Pulsa el botón para ver los resultados.
     </p>
-
   </div>
 )}
+
 
 
     </div>
