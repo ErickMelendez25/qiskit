@@ -38,7 +38,7 @@ const DashboardQiskit = () => {
 
 
 
-  const API_BACKEND = 'https://zonas.grupo-digital-nextri.com/api';
+  const API_BACKEND = 'https://qiskit-production.up.railway.app/api';
   const API_QISKIT = 'http://localhost:8000';
 
 
