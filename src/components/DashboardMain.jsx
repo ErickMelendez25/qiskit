@@ -38,8 +38,8 @@ const DashboardQiskit = () => {
 
 
 
-  const API_BACKEND = 'https://qiskit-production.up.railway.app/api';
-  const API_QISKIT = 'https://microservicioqiskit-production.up.railway.app';
+  const API_BACKEND = 'http://localhost:5000/api';
+  const API_QISKIT = 'http://localhost:8000';
 
 
   // Obtener zonas al monta
@@ -103,6 +103,7 @@ useEffect(() => {
     try {
       const res = await fetch(`${API_BACKEND}/zonas/${zId}/ultimas-lecturas`);
       const data = await res.json();
+      console.log("Lecturas recibidas:", data); // 👀 aquí revisa
       setLecturas(data);
     } catch (error) {
       console.error('Error al obtener lecturas:', error);
@@ -110,31 +111,33 @@ useEffect(() => {
     }
   };
 
-  const ejecutarModelo = async () => {
-    if (zonaId === null) return;
+const ejecutarModelo = async () => {
+  if (!lecturas || lecturas.length === 0) return;
 
-    try {
-      const res = await fetch(`${API_QISKIT}/ejecut`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ zona_id: zonaId })
-      });
-
-      const data = await res.json();
-      setResultadoModelo(data);
-
-      // Luego de obtener los resultados, cargar la interpretación:
-      const respInter = await fetch(`${API_QISKIT}/interpretacion/${zonaId}`);
-      if (respInter.ok) {
-        const texto = await respInter.text();
-        setInterpretacion(texto);
-      } else {
-        setInterpretacion("⚠️ No se encontró una interpretación para esta zona.");
-      }
-    } catch (error) {
-      console.error('Error al ejecutar modelo o cargar interpretación:', error);
+  // Tomar la última lectura de cada sensor
+  const input = {};
+  sensores.forEach(s => {
+    const valores = filtrarPorTipo(s.tipo);
+    if (valores.length > 0) {
+      input[s.tipo] = valores[0].valor;
     }
-  };
+  });
+
+  try {
+    const res = await fetch(`${API_QISKIT}/predict`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(input)
+    });
+
+    const data = await res.json();
+    setResultadoModelo(data);
+    setInterpretacion(data.interpretacion || "⚠️ No hay interpretación disponible.");
+  } catch (error) {
+    console.error('Error al ejecutar modelo:', error);
+  }
+};
+
 
 
 
@@ -148,13 +151,23 @@ useEffect(() => {
     { tipo: 'conductividad', titulo: 'Conductividad (us/cm)', color: '#22d3ee' }
   ];
 
+  const normalizar = (str) =>
+    str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
   const filtrarPorTipo = (tipo) =>
-    lecturas
-      .filter((l) => l.tipo_sensor.toLowerCase() === tipo.toLowerCase())
+    (Array.isArray(lecturas) ? lecturas : [])
+      .filter((l) => {
+        const sensorNormalizado = normalizar(l.sensor.replace(/^sensor de /i, '')); // quitar prefijo
+        return sensorNormalizado === normalizar(tipo);
+      })
+      .sort((a, b) => new Date(b.fecha_lectura) - new Date(a.fecha_lectura))
+      .slice(0, 3) // solo 3 últimas
       .map((l, i) => ({
         name: `#${i + 1}`,
         valor: parseFloat(l.valor)
       }));
+
+
 
         const stringToColor = (str) => {
       let hash = 0;
@@ -368,7 +381,7 @@ useEffect(() => {
           </div>
         )}
 
-        <div className="graficos-container">
+        <div className="graficos-mapa">
           <div className="grafico-box">
             <h5>Mapa de Calor</h5>
             <img
@@ -378,12 +391,7 @@ useEffect(() => {
             />
           </div>
 
-
-        </div>
-
-        <div className="graficos-container">
-
-           <div className="grafico-box">
+          <div className="grafico-mapa">
             <h5>Matriz de Confusión</h5>
             <img
               className="grafico-img"
@@ -391,8 +399,8 @@ useEffect(() => {
               alt="Matriz Confusión"
             />
           </div>
-
         </div>
+
 
         {interpretacion && (
           <div className="interpretacion-box">

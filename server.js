@@ -343,10 +343,10 @@ app.get('/api/zonas/:zona_id/indicadores', (req, res) => {
 app.get('/api/zonas/:zona_id/ultimas-lecturas', (req, res) => {
   const { zona_id } = req.params;
   const sql = `
-    SELECT tipo_sensor, valor, timestamp
+    SELECT sensor, valor, fecha_lectura
     FROM vista_tres_ultimas_lecturas_por_zona
     WHERE zona_id = ?
-    ORDER BY tipo_sensor, timestamp DESC
+    ORDER BY sensor, fecha_lectura DESC
   `;
 
   db.query(sql, [zona_id], (err, rows) => {
@@ -354,9 +354,16 @@ app.get('/api/zonas/:zona_id/ultimas-lecturas', (req, res) => {
       console.error('Error al consultar lecturas:', err);
       return res.status(500).json({ message: 'Error al consultar lecturas por zona' });
     }
-    res.json(rows);
+    // Convertir los valores a número
+    const datos = rows.map(r => ({
+      sensor: r.sensor,
+      valor: parseFloat(r.valor),
+      fecha_lectura: r.fecha_lectura
+    }));
+    res.json(datos);
   });
 });
+
 
 
 
