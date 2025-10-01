@@ -27,27 +27,32 @@ const DashboardQiskit = () => {
   const [distritoSeleccionado, setDistritoSeleccionado] = useState('');
 
   const [interpretacion, setInterpretacion] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const cultivoRecomendado = interpretacion
+  const cultivoRecomendado = (interpretacion || "")
     .split('\n')
     .find(line => line.includes('✅ Recomendado'));
 
   // API endpoints
-  const API_BACKEND = 'https://qiskit-production.up.railway.app/api';
-  const API_QISKIT = 'https://microservicioqiskit-production.up.railway.app';
+  const API_BACKEND = 'https://qiskit-production.up.railway.app/api'; // tu backend de zonas
+  const API_QISKIT = 'https://microservicioqiskit-production.up.railway.app'; // microservicio Qiskit
 
   // -------------------- Cargar zonas --------------------
   useEffect(() => {
     fetch(`${API_BACKEND}/zonas`)
       .then(res => res.json())
       .then(data => {
-        setZonas(data);
-        if (data.length > 0 && zonaId === null) {
+        setZonas(data || []);
+        if ((data || []).length > 0 && zonaId === null) {
           setZonaId(data[0].id);
         }
       })
-      .catch(err => console.error('Error al cargar zonas:', err));
-  }, []);
+      .catch(err => {
+        console.error('Error al cargar zonas:', err);
+        setZonas([]);
+      });
+  }, []); // eslint-disable-line
 
   // -------------------- Regiones / Provincias / Distritos --------------------
   useEffect(() => {
@@ -87,14 +92,22 @@ const DashboardQiskit = () => {
     if (zonaId !== null) {
       fetchLecturas(zonaId);
       setResultadoModelo(null);
+      setInterpretacion('');
+      setError(null);
     }
-  }, [zonaId]);
+  }, [zonaId]); // eslint-disable-line
 
   const fetchLecturas = async (zId) => {
     try {
       const res = await fetch(`${API_BACKEND}/zonas/${zId}/ultimas-lecturas`);
+      if (!res.ok) {
+        console.error('fetchLecturas: response not ok', res.status);
+        setLecturas([]);
+        return;
+      }
       const data = await res.json();
-      setLecturas(data);
+      console.log('Lecturas recibidas para zona', zId, data);
+      setLecturas(data || []);
     } catch (error) {
       console.error('Error al obtener lecturas:', error);
       setLecturas([]);
@@ -103,8 +116,19 @@ const DashboardQiskit = () => {
 
   // -------------------- Ejecutar modelo cuántico --------------------
   const ejecutarModelo = async () => {
-    if (!lecturas || lecturas.length === 0) return;
+    setError(null);
+    setResultadoModelo(null);
+    setInterpretacion('');
+    if (zonaId === null) {
+      setError("Selecciona primero una zona válida.");
+      return;
+    }
+    if (!lecturas || lecturas.length === 0) {
+      setError("No hay lecturas para la zona seleccionada.");
+      return;
+    }
 
+    // Construir payload con la última lectura de cada sensor (igual que los gráficos)
     const input = {};
     sensores.forEach(s => {
       const valores = filtrarPorTipo(s.tipo);
@@ -113,18 +137,46 @@ const DashboardQiskit = () => {
       }
     });
 
+    // DEBUG: ver lo que enviamos
+    console.log("Ejecutando modelo para zone_id =", zonaId, "payload:", input);
+
+    // enviar { zone_id, payload } para que el backend no devuelva 400
+    const body = { zone_id: zonaId, payload: input };
+
+    setLoading(true);
     try {
       const res = await fetch(`${API_QISKIT}/predict`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(input)
+        body: JSON.stringify(body),
+        credentials: 'omit' // o 'include' si necesitas cookies
       });
 
+      // si no es ok devolver detalle
+      if (!res.ok) {
+        let detalle = `HTTP ${res.status}`;
+        try {
+          const t = await res.json();
+          detalle = t.detail || JSON.stringify(t);
+        } catch (e) {
+          const text = await res.text();
+          detalle = text || detalle;
+        }
+        console.error('Respuesta no OK de /predict:', detalle);
+        setError(`Error del servidor: ${detalle}`);
+        setLoading(false);
+        return;
+      }
+
       const data = await res.json();
-      setResultadoModelo(data);
-      setInterpretacion(data.interpretacion || "⚠️ No hay interpretación disponible.");
-    } catch (error) {
-      console.error('Error al ejecutar modelo:', error);
+      console.log('Respuesta /predict:', data);
+      setResultadoModelo(data || null);
+      setInterpretacion(data?.interpretacion || "⚠️ No hay interpretación disponible.");
+    } catch (err) {
+      console.error('Error al ejecutar modelo:', err);
+      setError(`Error de red o servidor al ejecutar el modelo: ${err.message || err}`);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -140,12 +192,12 @@ const DashboardQiskit = () => {
   ];
 
   const normalizar = (str) =>
-    str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
 
   const filtrarPorTipo = (tipo) =>
     (Array.isArray(lecturas) ? lecturas : [])
       .filter((l) => {
-        const sensorNormalizado = normalizar(l.sensor.replace(/^sensor de /i, ''));
+        const sensorNormalizado = normalizar((l.sensor || "").replace(/^sensor de /i, ''));
         return sensorNormalizado === normalizar(tipo);
       })
       .sort((a, b) => new Date(b.fecha_lectura) - new Date(a.fecha_lectura))
@@ -158,7 +210,7 @@ const DashboardQiskit = () => {
   // -------------------- Zonas filtradas y mapa --------------------
   const stringToColor = (str) => {
     let hash = 0;
-    for (let i = 0; i < str.length; i++) {
+    for (let i = 0; i < (str || '').length; i++) {
       hash = str.charCodeAt(i) + ((hash << 5) - hash);
     }
     const c = (hash & 0x00FFFFFF).toString(16).toUpperCase();
@@ -180,9 +232,9 @@ const DashboardQiskit = () => {
       }
       setShowMap(true);
     } else {
-      setShowMap(regionSeleccionada || provinciaSeleccionada || distritoSeleccionado);
+      setShowMap(Boolean(regionSeleccionada || provinciaSeleccionada || distritoSeleccionado));
     }
-  }, [zonasFiltradas]);
+  }, [zonasFiltradas]); // eslint-disable-line
 
   const puntos = useMemo(() => {
     return zonasFiltradas
@@ -193,15 +245,12 @@ const DashboardQiskit = () => {
         descripcion: z.descripcion || '',
         ubicacion_lat: parseFloat(z.latitud),
         ubicacion_lon: parseFloat(z.longitud),
-        color: stringToColor(z.distrito_id?.toString() || '')
+        color: stringToColor(String(z.distrito_id || ''))
       }));
   }, [zonasFiltradas]);
 
   const handleSelectZona = (e) => setZonaId(Number(e.target.value));
-  const handleMapaSelect = (idSeleccionado) => {
-    setZonaId(idSeleccionado);
-    setShowMap(false);
-  };
+  const handleMapaSelect = (idSeleccionado) => { setZonaId(idSeleccionado); setShowMap(false); };
 
   // -------------------- Render --------------------
   return (
@@ -257,14 +306,20 @@ const DashboardQiskit = () => {
       </div>
 
       <div className="centered">
-        <button onClick={ejecutarModelo} className="execute-button">
-          Ejecutar Modelo Cuántico
+        <button onClick={ejecutarModelo} className="execute-button" disabled={loading}>
+          {loading ? 'Ejecutando...' : 'Ejecutar Modelo Cuántico'}
         </button>
       </div>
 
+      {error && (
+        <div style={{ marginTop: 12, color: '#841515', background: '#ffe6e6', padding: 10, borderRadius: 8 }}>
+          <strong>Error:</strong> {String(error)}
+        </div>
+      )}
+
       {resultadoModelo ? (
         <div className="result-card">
-          <h3>Resultado de Quantum KMeans</h3>
+          <h3>Resultado de Quantum KMeans / QSVC</h3>
 
           {resultadoModelo.imagenes ? (
             <>
@@ -287,8 +342,8 @@ const DashboardQiskit = () => {
                 </div>
 
                 <div className="grafico-box">
-                  <h5>Superposición Cuántica</h5>
-                  <img className="grafico-img" src={`${API_QISKIT}${resultadoModelo.imagenes.superposicion}`} alt="Superposición" />
+                  <h5>Superposición Cuántica (PCA)</h5>
+                  <img className="grafico-img" src={`${API_QISKIT}${resultadoModelo.imagenes.pca || resultadoModelo.imagenes.superposicion}`} alt="Superposición" />
                 </div>
 
                 <div className="grafico-box">
