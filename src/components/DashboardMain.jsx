@@ -185,14 +185,16 @@ const DashboardQiskit = () => {
     { tipo: 'temperatura', titulo: 'Temperatura (°C)', color: '#f87171' },
     { tipo: 'humedad', titulo: 'Humedad (%)', color: '#60a5fa' },
     { tipo: 'ph', titulo: 'Nivel de pH', color: '#34d399' },
-    { tipo: 'nitrógeno', titulo: 'Nitrógeno (mg/kg)', color: '#fbbf24' },
-    { tipo: 'fósforo', titulo: 'Fósforo (mg/kg)', color: '#a78bfa' },
+    { tipo: 'nitrogeno', titulo: 'Nitrógeno (mg/kg)', color: '#fbbf24' },
+    { tipo: 'fosforo', titulo: 'Fósforo (mg/kg)', color: '#a78bfa' },
     { tipo: 'potasio', titulo: 'Potasio (mg/kg)', color: '#f472b6' },
     { tipo: 'conductividad', titulo: 'Conductividad (us/cm)', color: '#22d3ee' }
   ];
 
+
   const normalizar = (str) =>
     str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
+
 
   const filtrarPorTipo = (tipo) =>
     (Array.isArray(lecturas) ? lecturas : [])
@@ -326,34 +328,60 @@ const DashboardQiskit = () => {
               <div className="graficos-container">
                 <div className="grafico-box">
                   <h5>Clústeres</h5>
-                  <img className="grafico-img" src={`${API_QISKIT}${resultadoModelo.imagenes.clusters}`} alt="Cluster" />
+                  <img
+                    className="grafico-img"
+                    src={`${API_QISKIT}${resultadoModelo.imagenes.clusters}`}
+                    alt="Clusters"
+                  />
                 </div>
 
                 <div className="grafico-box">
-                  <h5>Matriz Kernel</h5>
-                  <img className="grafico-img" src={`${API_QISKIT}${resultadoModelo.imagenes.kernel}`} alt="Kernel" />
+                  <h5>Importancia de Sensores</h5>
+                  <img
+                    className="grafico-img"
+                    src={`${API_QISKIT}${resultadoModelo.imagenes.importance}`}
+                    alt="Importancia Sensores"
+                  />
                 </div>
               </div>
 
               <div className="graficos-mapa">
                 <div className="grafico-box">
-                  <h5>Mapa de Calor</h5>
-                  <img className="grafico-img" src={`${API_QISKIT}${resultadoModelo.imagenes.heatmap}`} alt="Heatmap" />
-                </div>
-
-                <div className="grafico-box">
                   <h5>Superposición Cuántica (PCA)</h5>
-                  <img className="grafico-img" src={`${API_QISKIT}${resultadoModelo.imagenes.pca || resultadoModelo.imagenes.superposicion}`} alt="Superposición" />
+                  <img
+                    className="grafico-img"
+                    src={`${API_QISKIT}${resultadoModelo.imagenes.pca}`}
+                    alt="Superposición PCA"
+                  />
                 </div>
 
                 <div className="grafico-box">
-                  <h5>Matriz de Confusión</h5>
-                  <img className="grafico-img" src={`${API_QISKIT}${resultadoModelo.imagenes.confusion}`} alt="Matriz Confusión" />
+                  <h5>Esfera de Bloch</h5>
+                  <img
+                    className="grafico-img"
+                    src={`${API_QISKIT}${resultadoModelo.imagenes.bloch}`}
+                    alt="Bloch Sphere"
+                  />
                 </div>
               </div>
+
+              {/* Si quieres también mostrar estadísticas como CSV descargable */}
+              {resultadoModelo.imagenes.stats && (
+                <div className="grafico-box">
+                  <h5>Estadísticas de Entrenamiento</h5>
+                  <a
+                    href={`${API_QISKIT}${resultadoModelo.imagenes.stats}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-descargar"
+                  >
+                    Descargar CSV
+                  </a>
+                </div>
+              )}
             </>
           ) : (
-            <p>⚠️ No se encontraron imágenes generadas.</p>
+            <p>No se generaron imágenes en el resultado.</p>
           )}
 
           {interpretacion && (
