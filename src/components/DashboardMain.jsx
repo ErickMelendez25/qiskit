@@ -137,11 +137,10 @@ const DashboardQiskit = () => {
       }
     });
 
-    // DEBUG: ver lo que enviamos
-    console.log("Ejecutando modelo para zone_id =", zonaId, "payload:", input);
-
-    // enviar { zone_id, payload } para que el backend no devuelva 400
     const body = { zone_id: zonaId, payload: input };
+
+    // ✅ DEBUG: ver lo que enviamos
+    console.log("📤 Ejecutando modelo con body:", body);
 
     setLoading(true);
     try {
@@ -149,10 +148,9 @@ const DashboardQiskit = () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
-        credentials: 'omit' // o 'include' si necesitas cookies
+        credentials: 'omit'
       });
 
-      // si no es ok devolver detalle
       if (!res.ok) {
         let detalle = `HTTP ${res.status}`;
         try {
@@ -169,7 +167,7 @@ const DashboardQiskit = () => {
       }
 
       const data = await res.json();
-      console.log('Respuesta /predict:', data);
+      console.log('✅ Respuesta /predict:', data);
       setResultadoModelo(data || null);
       setInterpretacion(data?.interpretacion || "⚠️ No hay interpretación disponible.");
     } catch (err) {
@@ -185,16 +183,14 @@ const DashboardQiskit = () => {
     { tipo: 'temperatura', titulo: 'Temperatura (°C)', color: '#f87171' },
     { tipo: 'humedad', titulo: 'Humedad (%)', color: '#60a5fa' },
     { tipo: 'ph', titulo: 'Nivel de pH', color: '#34d399' },
-    { tipo: 'nitrogeno', titulo: 'Nitrógeno (mg/kg)', color: '#fbbf24' },
-    { tipo: 'fosforo', titulo: 'Fósforo (mg/kg)', color: '#a78bfa' },
+    { tipo: 'nitrógeno', titulo: 'Nitrógeno (mg/kg)', color: '#fbbf24' },   // ← con tilde
+    { tipo: 'fósforo', titulo: 'Fósforo (mg/kg)', color: '#a78bfa' },       // ← con tilde
     { tipo: 'potasio', titulo: 'Potasio (mg/kg)', color: '#f472b6' },
     { tipo: 'conductividad', titulo: 'Conductividad (us/cm)', color: '#22d3ee' }
   ];
 
-
   const normalizar = (str) =>
     str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
-
 
   const filtrarPorTipo = (tipo) =>
     (Array.isArray(lecturas) ? lecturas : [])
@@ -365,7 +361,6 @@ const DashboardQiskit = () => {
                 </div>
               </div>
 
-              {/* Si quieres también mostrar estadísticas como CSV descargable */}
               {resultadoModelo.imagenes.stats && (
                 <div className="grafico-box">
                   <h5>Estadísticas de Entrenamiento</h5>
