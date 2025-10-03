@@ -2,7 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'; // Importa Navigate para redirigir
 import DashboardHeader from './components/DashboardHeader';
 import DashboardFooter from './components/DashboardFooter';
-import DashboardMain from './components/DashboardMain';
+import DashboardQiskit from './DashboardQiskit';
+
 import Login from './components/Login';
 import VistaOpcion from './components/VistaOpcion';
 import ProcesoInscripcion from './pages/PracticasPreprofesionales/ProcesoInscripcion'; 
@@ -39,7 +40,7 @@ function App() {
                 element={
                   <>
                     <DashboardHeader />
-                    <DashboardMain />
+                    <DashboardQiskit />
                     <DashboardFooter />
                   </>
                 }
@@ -55,7 +56,7 @@ function App() {
                 element={
                   <>
                     <DashboardHeader />
-                    <DashboardMain />
+                    <DashboardQiskit />
                     <DashboardFooter />
                   </>
                 }
