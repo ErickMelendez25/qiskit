@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'; // Importa Navigate para redirigir
 import DashboardHeader from './components/DashboardHeader';
 import DashboardFooter from './components/DashboardFooter';
-import DashboardQiskit from './DashboardQiskit';
+import DashboardQiskit from './components/DashboardQiskit';
 
 import Login from './components/Login';
 import VistaOpcion from './components/VistaOpcion';
