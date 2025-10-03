@@ -6,7 +6,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'r
  * NasaPointSearch
  * - Permite buscar por nombre de lugar (geocoding con Nominatim) o por lat/lon
  * - Consulta NASA POWER (parámetros meteorológicos) y SoilGrids (propiedades de suelo)
- * - Devuelve un objeto con las "lecturas" para que el Dashboard principal las consuma
+ * - Devuelve un objeto con las lecturas para que el Dashboard principal las consuma
  */
 
 const NasaPointSearch = ({ onLecturasFetched }) => {
@@ -15,7 +15,7 @@ const NasaPointSearch = ({ onLecturasFetched }) => {
   const [lon, setLon] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [seriesData, setSeriesData] = useState(null); // toda la serie NASA (últimos 7 días)
+  const [seriesData, setSeriesData] = useState(null); // serie NASA últimos 7 días
   const [lastReadings, setLastReadings] = useState(null); // último muestreo combinado con suelo
 
   const geocodePlace = async (place) => {
@@ -27,15 +27,15 @@ const NasaPointSearch = ({ onLecturasFetched }) => {
   };
 
   const fetchNasaPower = async (latVal, lonVal) => {
-    // Datos diarios de los últimos 7 días (hasta ayer)
+    // Datos diarios últimos 7 días hasta ayer
     const end = new Date();
     end.setDate(end.getDate() - 1); // ayer
-    const start = new Date();
+    const start = new Date(end);
     start.setDate(end.getDate() - 6);
 
     const fmt = (d) => d.toISOString().slice(0,10).replace(/-/g,''); // YYYYMMDD
     const params = ['T2M','RH2M'].join(',');
-    const url = `https://power.larc.nasa.gov/api/temporal/daily/point?parameters=${params}&start=${fmt(start)}&end=${fmt(end)}&latitude=${latVal}&longitude=${lonVal}&format=JSON`;
+    const url = `https://power.larc.nasa.gov/api/temporal/daily/point?parameters=${params}&start=${fmt(start)}&end=${fmt(end)}&latitude=${latVal}&longitude=${lonVal}&community=AG&format=JSON`;
 
     const res = await fetch(url);
     if (!res.ok) throw new Error('ERROR NASA POWER: ' + res.status);
@@ -67,15 +67,15 @@ const NasaPointSearch = ({ onLecturasFetched }) => {
     const out = { ph: null, nitrogen: null, cec: null };
     try {
       const props = json.properties || {};
-      if (props.phh2o && Array.isArray(props.phh2o.depths)) {
+      if (props.phh2o?.depths) {
         const d = props.phh2o.depths.find(x => x.depth === '0-5') || props.phh2o.depths[0];
         out.ph = d?.values?.mean ?? d?.values?.['50pct'] ?? null;
       }
-      if (props.nitrogen && Array.isArray(props.nitrogen.depths)) {
+      if (props.nitrogen?.depths) {
         const d = props.nitrogen.depths.find(x => x.depth === '0-5') || props.nitrogen.depths[0];
         out.nitrogen = d?.values?.mean ?? d?.values?.['50pct'] ?? null;
       }
-      if (props.cec && Array.isArray(props.cec.depths)) {
+      if (props.cec?.depths) {
         const d = props.cec.depths.find(x => x.depth === '0-5') || props.cec.depths[0];
         out.cec = d?.values?.mean ?? d?.values?.['50pct'] ?? null;
       }
@@ -86,9 +86,9 @@ const NasaPointSearch = ({ onLecturasFetched }) => {
     return {
       ph: out.ph,
       nitrógeno: out.nitrogen,
-      fósforo: null,
-      potasio: null,
-      conductividad: out.cec
+      fósforo: null, // no disponible en SoilGrids
+      potasio: null, // no disponible en SoilGrids
+      conductividad: out.cec // usamos CEC como proxy
     };
   };
 
