@@ -31,7 +31,7 @@ const NasaPointSearch = ({ onLecturasFetched }) => {
     const end = new Date();
     end.setDate(end.getDate() - 1); // ayer
     const start = new Date(end);
-    start.setDate(end.getDate() - 6);
+    start.setDate(start.getDate() - 6); // hace 6 días desde "end"
 
     const fmt = (d) => d.toISOString().slice(0,10).replace(/-/g,''); // YYYYMMDD
     const params = ['T2M','RH2M'].join(',');
