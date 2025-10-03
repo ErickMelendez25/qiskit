@@ -26,37 +26,43 @@ const NasaPointSearch = ({ onLecturasFetched }) => {
     return { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon), display_name: data[0].display_name };
   };
 
-  const fetchNasaPower = async (latVal, lonVal) => {
-    // Datos diarios últimos 7 días hasta ayer
-    const end = new Date();
-    end.setDate(end.getDate() - 1); // ayer
-    const start = new Date(end);
-    start.setDate(start.getDate() - 6); // hace 6 días desde "end"
+const fetchNasaPower = async (latVal, lonVal) => {
+  // Definir fechas: últimos 7 días hasta anteayer (para evitar problemas)
+  const today = new Date();
+  today.setUTCHours(0, 0, 0, 0);
 
-    const fmt = (d) => d.toISOString().slice(0,10).replace(/-/g,''); // YYYYMMDD
-    const params = ['T2M','RH2M'].join(',');
-    const url = `https://power.larc.nasa.gov/api/temporal/daily/point?parameters=${params}&start=${fmt(start)}&end=${fmt(end)}&latitude=${latVal}&longitude=${lonVal}&community=AG&format=JSON`;
+  const end = new Date(today);
+  end.setDate(end.getDate() - 2); // anteayer
+  const start = new Date(end);
+  start.setDate(end.getDate() - 6);
 
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('ERROR NASA POWER: ' + res.status);
-    const json = await res.json();
+  const fmt = (d) => d.toISOString().slice(0,10).replace(/-/g,''); // YYYYMMDD
+  const params = ['T2M','RH2M'].join(',');
+  const url = `https://power.larc.nasa.gov/api/temporal/daily/point?parameters=${params}&start=${fmt(start)}&end=${fmt(end)}&latitude=${latVal}&longitude=${lonVal}&community=AG&format=JSON`;
 
-    const outSeries = [];
-    try {
-      const paramsObj = json.properties.parameter || {};
-      const dates = Object.keys(paramsObj.T2M || {}).sort();
-      for (const d of dates) {
-        outSeries.push({
-          fecha: d,
-          temperatura: Number(paramsObj.T2M[d]) ?? null,
-          humedad: Number(paramsObj.RH2M[d]) ?? null
-        });
-      }
-    } catch (e) {
-      console.warn('Parse NASA error', e);
+  console.log("NASA URL:", url); // Debug
+
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('ERROR NASA POWER: ' + res.status);
+  const json = await res.json();
+
+  const outSeries = [];
+  try {
+    const paramsObj = json.properties.parameter || {};
+    const dates = Object.keys(paramsObj.T2M || {}).sort();
+    for (const d of dates) {
+      outSeries.push({
+        fecha: d,
+        temperatura: Number(paramsObj.T2M[d]) ?? null,
+        humedad: Number(paramsObj.RH2M[d]) ?? null
+      });
     }
-    return outSeries;
-  };
+  } catch (e) {
+    console.warn('Parse NASA error', e);
+  }
+  return outSeries;
+};
+
 
   const fetchSoilGrids = async (latVal, lonVal) => {
     const url = `https://rest.isric.org/soilgrids/v2.0/properties/query?lon=${lonVal}&lat=${latVal}`;
