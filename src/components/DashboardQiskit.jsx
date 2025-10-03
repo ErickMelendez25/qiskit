@@ -1,8 +1,13 @@
-// src/DashboardQiskit.jsx
+
+
+
+// ------------------------------------------------------------
+// File: src/DashboardQiskit.jsx
 import React, { useEffect, useState, useMemo } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 import './DashboardQiskit.css';
 import MapaCiudad from './Mapa';
+import NasaPointSearch from './components/NasaPointSearch';
 
 const Card = ({ title, children }) => (
   <div className="card">
@@ -139,7 +144,6 @@ const DashboardQiskit = () => {
 
     const body = { zone_id: zonaId, payload: input };
 
-    // ✅ DEBUG: ver lo que enviamos
     console.log("📤 Ejecutando modelo con body:", body);
 
     setLoading(true);
@@ -183,8 +187,8 @@ const DashboardQiskit = () => {
     { tipo: 'temperatura', titulo: 'Temperatura (°C)', color: '#f87171' },
     { tipo: 'humedad', titulo: 'Humedad (%)', color: '#60a5fa' },
     { tipo: 'ph', titulo: 'Nivel de pH', color: '#34d399' },
-    { tipo: 'nitrógeno', titulo: 'Nitrógeno (mg/kg)', color: '#fbbf24' },   // ← con tilde
-    { tipo: 'fósforo', titulo: 'Fósforo (mg/kg)', color: '#a78bfa' },       // ← con tilde
+    { tipo: 'nitrógeno', titulo: 'Nitrógeno (mg/kg)', color: '#fbbf24' },
+    { tipo: 'fósforo', titulo: 'Fósforo (mg/kg)', color: '#a78bfa' },
     { tipo: 'potasio', titulo: 'Potasio (mg/kg)', color: '#f472b6' },
     { tipo: 'conductividad', titulo: 'Conductividad (us/cm)', color: '#22d3ee' }
   ];
@@ -250,10 +254,23 @@ const DashboardQiskit = () => {
   const handleSelectZona = (e) => setZonaId(Number(e.target.value));
   const handleMapaSelect = (idSeleccionado) => { setZonaId(idSeleccionado); setShowMap(false); };
 
+  // -------------------- Integración con NasaPointSearch --------------------
+  const handleLecturasFromNasa = (nuevasLecturas) => {
+    // Cuando NasaPointSearch devuelve lecturas, las usamos como 'lecturas' del dashboard
+    // para que los gráficos y el modelo funcionen.
+    console.log('Lecturas recibidas desde NasaPointSearch', nuevasLecturas);
+    setLecturas(nuevasLecturas || []);
+    // Opcional: crear una zona temporal o relacionar con zona existente
+    setZonaId(null);
+  };
+
   // -------------------- Render --------------------
   return (
     <div className="dashboard-container">
       <h2 className="dashboard-title">Panel de Sensores y Modelos Cuánticos</h2>
+
+      {/* Componente nuevo para buscar por lugar/lat-lon y obtener 7 indicadores */}
+      <NasaPointSearch onLecturasFetched={handleLecturasFromNasa} />
 
       <div className="zona-select" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
         <label htmlFor="zona">Selecciona una zona:</label>
