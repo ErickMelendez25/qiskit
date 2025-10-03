@@ -7,7 +7,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 import './DashboardQiskit.css';
 import MapaCiudad from './Mapa';
-import NasaPointSearch from './components/NasaPointSearch';
+import NasaPointSearch from "./NasaPointSearch";
 
 const Card = ({ title, children }) => (
   <div className="card">
