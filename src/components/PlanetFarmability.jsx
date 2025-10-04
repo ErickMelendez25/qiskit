@@ -1,16 +1,36 @@
 // File: src/components/PlanetFarmabilityReal.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
 const planets = [
   {
     name: 'Tierra',
     type: 'earth',
+    img: 'https://upload.wikimedia.org/wikipedia/commons/9/97/The_Earth_seen_from_Apollo_17.jpg',
     coords: { lat: -12.0464, lon: -77.0428 } // Lima, Perú
   },
   {
     name: 'Marte',
     type: 'mars',
+    img: 'https://mars.nasa.gov/system/news_items/main_images/9754_PIA25681-FigureA-web.jpg',
+    coords: null
+  },
+  {
+    name: 'Europa',
+    type: 'europa',
+    img: 'https://upload.wikimedia.org/wikipedia/commons/5/54/Europa-moon.jpg',
+    coords: null
+  },
+  {
+    name: 'Titán',
+    type: 'titan',
+    img: 'https://upload.wikimedia.org/wikipedia/commons/0/02/Titan_in_true_color.jpg',
+    coords: null
+  },
+  {
+    name: 'Kepler-452b',
+    type: 'kepler',
+    img: 'https://exoplanets.nasa.gov/internal_resources/1040',
     coords: null
   }
 ];
@@ -21,7 +41,7 @@ const PlanetFarmabilityReal = ({ onLecturasFetched }) => {
   const [seriesData, setSeriesData] = useState(null);
   const [lastReadings, setLastReadings] = useState(null);
   const [error, setError] = useState(null);
-  const [epicImage, setEpicImage] = useState(null); // 🚀 Imagen real de la Tierra
+  const [epicImage, setEpicImage] = useState(null);
 
   /** === Llamada real a NASA POWER === */
   const fetchEarthData = async (lat, lon) => {
@@ -51,7 +71,7 @@ const PlanetFarmabilityReal = ({ onLecturasFetched }) => {
       });
     });
 
-    // === Extra: Suelo desde SoilGrids ===
+    // === Suelo desde SoilGrids ===
     const soilUrl = `https://rest.isric.org/soilgrids/v2.0/properties/query?lon=${lon}&lat=${lat}`;
     const soilRes = await fetch(soilUrl);
     const soilJson = soilRes.ok ? await soilRes.json() : {};
@@ -83,7 +103,7 @@ const PlanetFarmabilityReal = ({ onLecturasFetched }) => {
 
   /** === Llamada real al InSight Mars Weather API === */
   const fetchMarsData = async () => {
-    const apiKey = 'A55L054LOyrxNd5jKwiE5DMhgYN9QDNy4jWsTvDh'; // ⚠️ reemplázalo por tu propia API key de NASA
+    const apiKey = 'A55L054LOyrxNd5jKwiE5DMhgYN9QDNy4jWsTvDh'; 
     const url = `https://api.nasa.gov/insight_weather/?api_key=${apiKey}&feedtype=json&ver=1.0`;
     const res = await fetch(url);
     if (!res.ok) throw new Error(`InSight API error ${res.status}`);
@@ -115,7 +135,27 @@ const PlanetFarmabilityReal = ({ onLecturasFetched }) => {
     return { outSeries, lects };
   };
 
-  /** === Llamada a NASA EPIC para obtener imagen real de la Tierra === */
+  /** === Ficticios: Europa, Titán, Kepler-452b === */
+  const fetchFictionalData = (planetName) => {
+    const outSeries = [
+      { fecha: '2025-09-01', temperatura: -150, humedad: null },
+      { fecha: '2025-09-02', temperatura: -145, humedad: null },
+      { fecha: '2025-09-03', temperatura: -148, humedad: null }
+    ];
+    const now = new Date().toISOString();
+    const lects = [
+      { sensor: 'temperatura', valor: -147, fecha_lectura: now },
+      { sensor: 'humedad', valor: null, fecha_lectura: now },
+      { sensor: 'ph', valor: null, fecha_lectura: now },
+      { sensor: 'nitrógeno', valor: null, fecha_lectura: now },
+      { sensor: 'fósforo', valor: null, fecha_lectura: now },
+      { sensor: 'potasio', valor: null, fecha_lectura: now },
+      { sensor: 'conductividad', valor: null, fecha_lectura: now }
+    ];
+    return { outSeries, lects };
+  };
+
+  /** === NASA EPIC: imagen real de la Tierra === */
   const fetchEpicImage = async () => {
     try {
       const res = await fetch("https://epic.gsfc.nasa.gov/api/natural");
@@ -150,7 +190,10 @@ const PlanetFarmabilityReal = ({ onLecturasFetched }) => {
         setEpicImage(epic);
       } else if (planet.type === 'mars') {
         data = await fetchMarsData();
-        setEpicImage(null); // Marte no tiene EPIC
+        setEpicImage(null);
+      } else {
+        data = fetchFictionalData(planet.name);
+        setEpicImage(null);
       }
 
       setSeriesData(data.outSeries);
@@ -167,13 +210,14 @@ const PlanetFarmabilityReal = ({ onLecturasFetched }) => {
 
   return (
     <div style={{ padding: 20 }}>
-      <h3>🌍 Evaluación real de datos planetarios</h3>
+      <h3>🌍 Evaluación de habitabilidad planetaria para cultivos</h3>
       <div style={{ display: 'flex', gap: 20, marginBottom: 20 }}>
         {planets.map(p => (
           <div key={p.name}
-               style={{ border: '1px solid #ccc', borderRadius: 10, width: 200, cursor: 'pointer' }}
+               style={{ border: '1px solid #ccc', borderRadius: 10, width: 200, cursor: 'pointer', textAlign: 'center', padding: 10 }}
                onClick={() => handlePlanetClick(p)}>
-            <div style={{ padding: 10, textAlign: 'center' }}>{p.name}</div>
+            <img src={p.img} alt={p.name} style={{ width: '100%', borderRadius: 10, height: 120, objectFit: 'cover' }} />
+            <div style={{ marginTop: 8, fontWeight: 'bold' }}>{p.name}</div>
           </div>
         ))}
       </div>
@@ -194,7 +238,7 @@ const PlanetFarmabilityReal = ({ onLecturasFetched }) => {
           </LineChart>
 
           <div style={{ minWidth: 250 }}>
-            <h5>Lecturas (último sol / día)</h5>
+            <h5>Lecturas (último día / sol)</h5>
             <ul>
               {lastReadings?.map((l, i) => (
                 <li key={i}><strong>{l.sensor}</strong>: {l.valor ?? 'N/A'}</li>
