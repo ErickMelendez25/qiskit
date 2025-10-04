@@ -1,24 +1,15 @@
 // File: src/components/PlanetFarmabilityReal.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
-
-/**
- * PlanetFarmabilityReal
- * - Usa NASA POWER para datos reales en Tierra
- * - Usa InSight Mars Weather API para datos reales de Marte (últimos sols)
- * - Muestra las 7 lecturas posibles cuando están disponibles
- */
 
 const planets = [
   {
     name: 'Tierra',
-    img: '/planets/earth.jpg',
     type: 'earth',
-    coords: { lat: -12.0464, lon: -77.0428 }
+    coords: { lat: -12.0464, lon: -77.0428 } // Lima, Perú
   },
   {
     name: 'Marte',
-    img: '/planets/mars.jpg',
     type: 'mars',
     coords: null
   }
@@ -30,10 +21,10 @@ const PlanetFarmabilityReal = ({ onLecturasFetched }) => {
   const [seriesData, setSeriesData] = useState(null);
   const [lastReadings, setLastReadings] = useState(null);
   const [error, setError] = useState(null);
+  const [epicImage, setEpicImage] = useState(null); // 🚀 Imagen real de la Tierra
 
-  /** Llamada real a NASA POWER para un punto en la Tierra */
+  /** === Llamada real a NASA POWER === */
   const fetchEarthData = async (lat, lon) => {
-    // fechas: últimos 7 días (menos 2 días para evitar datos incompletos)
     const today = new Date();
     today.setUTCHours(0, 0, 0, 0);
     const end = new Date(today);
@@ -46,9 +37,7 @@ const PlanetFarmabilityReal = ({ onLecturasFetched }) => {
     const url = `https://power.larc.nasa.gov/api/temporal/daily/point?parameters=${params}&start=${fmt(start)}&end=${fmt(end)}&latitude=${lat}&longitude=${lon}&community=AG&format=JSON`;
 
     const res = await fetch(url);
-    if (!res.ok) {
-      throw new Error(`NASA POWER error ${res.status}`);
-    }
+    if (!res.ok) throw new Error(`NASA POWER error ${res.status}`);
     const json = await res.json();
 
     const outSeries = [];
@@ -62,27 +51,19 @@ const PlanetFarmabilityReal = ({ onLecturasFetched }) => {
       });
     });
 
-    // Llamada a SoilGrids para suelo
+    // === Extra: Suelo desde SoilGrids ===
     const soilUrl = `https://rest.isric.org/soilgrids/v2.0/properties/query?lon=${lon}&lat=${lat}`;
     const soilRes = await fetch(soilUrl);
-    if (!soilRes.ok) {
-      console.warn('Error SoilGrids:', soilRes.status);
-    }
-    const soilJson = await soilRes.json();
+    const soilJson = soilRes.ok ? await soilRes.json() : {};
     const props = soilJson.properties || {};
-    const getFirstMean = (prop) => {
-      if (prop?.depths && prop.depths.length > 0) {
-        return prop.depths[0].values?.mean ?? null;
-      }
-      return null;
-    };
+    const getFirstMean = (prop) => prop?.depths?.[0]?.values?.mean ?? null;
 
     const soil = {
       ph: getFirstMean(props.phh2o),
       nitrógeno: getFirstMean(props.nitrogen),
       fósforo: null,
       potasio: null,
-      conductividad: getFirstMean(props.cec)  // usar CEC como proxy
+      conductividad: getFirstMean(props.cec)
     };
 
     const last = outSeries[outSeries.length - 1];
@@ -100,15 +81,12 @@ const PlanetFarmabilityReal = ({ onLecturasFetched }) => {
     return { outSeries, lects };
   };
 
-  /** Llamada real al InSight Mars Weather API */
+  /** === Llamada real al InSight Mars Weather API === */
   const fetchMarsData = async () => {
-    // Uso de la API de InSight: https://api.nasa.gov/insight_weather/?api_key=YOUR_KEY&feedtype=json&ver=1.0 :contentReference[oaicite:1]{index=1}
-    const apiKey = 'DEMO_KEY';  // reemplaza con tu NASA API key
+    const apiKey = 'A55L054LOyrxNd5jKwiE5DMhgYN9QDNy4jWsTvDh'; // ⚠️ reemplázalo por tu propia API key de NASA
     const url = `https://api.nasa.gov/insight_weather/?api_key=${apiKey}&feedtype=json&ver=1.0`;
     const res = await fetch(url);
-    if (!res.ok) {
-      throw new Error(`InSight API error ${res.status}`);
-    }
+    if (!res.ok) throw new Error(`InSight API error ${res.status}`);
     const json = await res.json();
 
     const solKeys = json.sol_keys || [];
@@ -117,11 +95,10 @@ const PlanetFarmabilityReal = ({ onLecturasFetched }) => {
       return {
         fecha: sol,
         temperatura: record?.AT?.av ?? null,
-        humedad: null  // no siempre disponible
+        humedad: null
       };
     });
 
-    // Lecturas del último sol
     const lastSol = solKeys[solKeys.length - 1];
     const rec = json[lastSol];
     const now = new Date().toISOString();
@@ -138,24 +115,48 @@ const PlanetFarmabilityReal = ({ onLecturasFetched }) => {
     return { outSeries, lects };
   };
 
+  /** === Llamada a NASA EPIC para obtener imagen real de la Tierra === */
+  const fetchEpicImage = async () => {
+    try {
+      const res = await fetch("https://epic.gsfc.nasa.gov/api/natural");
+      if (!res.ok) return null;
+      const data = await res.json();
+      if (data.length === 0) return null;
+
+      const first = data[0];
+      const date = new Date(first.date);
+      const year = date.getUTCFullYear();
+      const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+      const day = String(date.getUTCDate()).padStart(2, "0");
+      return `https://epic.gsfc.nasa.gov/archive/natural/${year}/${month}/${day}/png/${first.image}.png`;
+    } catch (err) {
+      console.warn("Error EPIC:", err);
+      return null;
+    }
+  };
+
   const handlePlanetClick = async (planet) => {
     setSelected(planet);
     setLoading(true);
     setError(null);
+    setSeriesData(null);
+    setLastReadings(null);
 
     try {
       let data;
       if (planet.type === 'earth') {
         data = await fetchEarthData(planet.coords.lat, planet.coords.lon);
+        const epic = await fetchEpicImage();
+        setEpicImage(epic);
       } else if (planet.type === 'mars') {
         data = await fetchMarsData();
+        setEpicImage(null); // Marte no tiene EPIC
       }
+
       setSeriesData(data.outSeries);
       setLastReadings(data.lects);
 
-      if (onLecturasFetched) {
-        onLecturasFetched(data.lects);
-      }
+      if (onLecturasFetched) onLecturasFetched(data.lects);
     } catch (err) {
       console.error('Error al obtener datos reales:', err);
       setError(err.message || String(err));
@@ -166,13 +167,12 @@ const PlanetFarmabilityReal = ({ onLecturasFetched }) => {
 
   return (
     <div style={{ padding: 20 }}>
-      <h3>Evaluación real de datos planetarios</h3>
+      <h3>🌍 Evaluación real de datos planetarios</h3>
       <div style={{ display: 'flex', gap: 20, marginBottom: 20 }}>
         {planets.map(p => (
           <div key={p.name}
                style={{ border: '1px solid #ccc', borderRadius: 10, width: 200, cursor: 'pointer' }}
                onClick={() => handlePlanetClick(p)}>
-            <img src={p.img} alt={p.name} style={{ width: '100%', borderRadius: '10px 10px 0 0' }} />
             <div style={{ padding: 10, textAlign: 'center' }}>{p.name}</div>
           </div>
         ))}
@@ -193,13 +193,20 @@ const PlanetFarmabilityReal = ({ onLecturasFetched }) => {
             <Line type="monotone" dataKey="humedad" stroke="#60a5fa" name="Humedad (%)" />
           </LineChart>
 
-          <div style={{ minWidth: 200 }}>
+          <div style={{ minWidth: 250 }}>
             <h5>Lecturas (último sol / día)</h5>
             <ul>
               {lastReadings?.map((l, i) => (
                 <li key={i}><strong>{l.sensor}</strong>: {l.valor ?? 'N/A'}</li>
               ))}
             </ul>
+
+            {epicImage && (
+              <div>
+                <h5>Imagen real EPIC</h5>
+                <img src={epicImage} alt="EPIC Earth" width="200" style={{ borderRadius: 10 }} />
+              </div>
+            )}
           </div>
         </div>
       )}
