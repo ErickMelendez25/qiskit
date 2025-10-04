@@ -1,6 +1,3 @@
-
-
-
 // ------------------------------------------------------------
 // File: src/DashboardQiskit.jsx
 import React, { useEffect, useState, useMemo } from 'react';
@@ -8,6 +5,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 import './DashboardQiskit.css';
 import MapaCiudad from './Mapa';
 import NasaPointSearch from "./NasaPointSearch";
+import PlanetFarmabilityReal from './PlanetFarmability'; // 👈 tu nuevo componente
 
 const Card = ({ title, children }) => (
   <div className="card">
@@ -40,8 +38,8 @@ const DashboardQiskit = () => {
     .find(line => line.includes('✅ Recomendado'));
 
   // API endpoints
-  const API_BACKEND = 'https://qiskit-production.up.railway.app/api'; // tu backend de zonas
-  const API_QISKIT = 'https://microservicioqiskit-production.up.railway.app'; // microservicio Qiskit
+  const API_BACKEND = 'https://qiskit-production.up.railway.app/api';
+  const API_QISKIT = 'https://microservicioqiskit-production.up.railway.app';
 
   // -------------------- Cargar zonas --------------------
   useEffect(() => {
@@ -133,7 +131,7 @@ const DashboardQiskit = () => {
       return;
     }
 
-    // Construir payload con la última lectura de cada sensor (igual que los gráficos)
+    // Construir payload
     const input = {};
     sensores.forEach(s => {
       const valores = filtrarPorTipo(s.tipo);
@@ -256,11 +254,8 @@ const DashboardQiskit = () => {
 
   // -------------------- Integración con NasaPointSearch --------------------
   const handleLecturasFromNasa = (nuevasLecturas) => {
-    // Cuando NasaPointSearch devuelve lecturas, las usamos como 'lecturas' del dashboard
-    // para que los gráficos y el modelo funcionen.
     console.log('Lecturas recibidas desde NasaPointSearch', nuevasLecturas);
     setLecturas(nuevasLecturas || []);
-    // Opcional: crear una zona temporal o relacionar con zona existente
     setZonaId(null);
   };
 
@@ -269,7 +264,10 @@ const DashboardQiskit = () => {
     <div className="dashboard-container">
       <h2 className="dashboard-title">Panel de Sensores y Modelos Cuánticos</h2>
 
-      {/* Componente nuevo para buscar por lugar/lat-lon y obtener 7 indicadores */}
+      {/* Nuevo componente PlanetFarmability */}
+      <PlanetFarmabilityReal onLecturasFetched={handleLecturasFromNasa} />
+
+      {/* Componente para búsqueda puntual NASA + SoilGrids */}
       <NasaPointSearch onLecturasFetched={handleLecturasFromNasa} />
 
       <div className="zona-select" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
