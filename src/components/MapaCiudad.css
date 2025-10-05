@@ -1,52 +1,170 @@
-/* MapaCiudad.css */
+/* === 🌌 MAPA CIUDAD — ESTILO NASA === */
 
 .mapa-contenedor {
   width: 100%;
-  height: 400px; /* ajusta la altura que desees */
-  margin: 1rem 0;
+  height: 450px;
+  margin: 2rem 0;
   position: relative;
+  border-radius: 1.2rem;
+  overflow: hidden;
+  background: radial-gradient(circle at 30% 20%, #0a0f2c 0%, #050720 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 25px rgba(99, 102, 241, 0.25);
+  transition: all 0.4s ease;
+}
+
+.mapa-contenedor:hover {
+  box-shadow: 0 0 40px rgba(99, 102, 241, 0.4);
+  transform: scale(1.01);
 }
 
 .mapa-area {
   position: absolute;
-  top: 0;
-  bottom: 0;
+  inset: 0;
   width: 100%;
+  height: 100%;
+  z-index: 2;
+  border-radius: inherit;
 }
 
-/* Personaliza el estilo de los marcadores si deseas */
+/* === MARCADOR PERSONALIZADO === */
 .custom-marker {
-  /* ya se configura inline en JS */
+  position: relative;
+  transform: translate(-50%, -100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: floatMarker 3s ease-in-out infinite;
+}
+
+.marker-core {
+  width: 16px;
+  height: 16px;
+  background: radial-gradient(circle, #5ee7df, #8b5cf6);
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.6), 0 0 25px rgba(99, 102, 241, 0.5);
+  z-index: 3;
+}
+
+.marker-glow {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(99, 102, 241, 0.25);
+  filter: blur(8px);
+  z-index: 2;
+}
+
+/* Animación flotante */
+@keyframes floatMarker {
+  0%, 100% {
+    transform: translate(-50%, -100%) translateY(0);
+  }
+  50% {
+    transform: translate(-50%, -100%) translateY(-6px);
+  }
+}
+
+/* === LABEL DEL MARCADOR === */
+.marker-label {
+  background: rgba(255, 255, 255, 0.1);
+  color: #e0e7ff;
+  padding: 4px 10px;
+  border-radius: 6px;
+  margin-top: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 2px 10px rgba(99, 102, 241, 0.25);
+  animation: fadeInLabel 1s ease forwards;
+}
+
+@keyframes fadeInLabel {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* === POPUP ESTILO ESPACIAL === */
+.leaflet-popup-content-wrapper {
+  background: rgba(15, 23, 42, 0.85);
+  color: #e0e7ff;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+  backdrop-filter: blur(10px);
+}
+
+.leaflet-popup-tip {
+  background: rgba(15, 23, 42, 0.85);
 }
 
 .popup-content h3 {
   margin: 0;
   font-size: 1rem;
+  color: #93c5fd;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
+
 .popup-content p {
-  margin: 0.2rem 0 0;
-  font-size: 0.9rem;
+  margin-top: 0.3rem;
+  font-size: 0.85rem;
+  color: #c7d2fe;
 }
 
-
-/* Ajusta la posición y estilo de la etiqueta junto al marcador */
-.marker-label {
-  background: white;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  color: #333;
-  white-space: nowrap;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-  pointer-events: none; /* para que el clic pase al marcador */
+/* === SCROLLBAR DEL MAPA === */
+.leaflet-container {
+  border-radius: inherit;
 }
 
-/* Si quieres que el label aparezca solo en hover, podrías: */
-/*
-.custom-marker .marker-label {
-  display: none;
+.leaflet-control-zoom {
+  border-radius: 8px;
+  overflow: hidden;
 }
-.custom-marker:hover .marker-label {
-  display: block;
+
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+  background: rgba(17, 24, 39, 0.8);
+  color: #e0e7ff;
+  border: none;
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
+  font-weight: bold;
 }
-*/
+
+.leaflet-control-zoom-in:hover,
+.leaflet-control-zoom-out:hover {
+  background: rgba(99, 102, 241, 0.9);
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .mapa-contenedor {
+    height: 320px;
+    border-radius: 0.8rem;
+  }
+
+  .marker-label {
+    font-size: 0.7rem;
+    padding: 3px 8px;
+  }
+
+  .popup-content h3 {
+    font-size: 0.9rem;
+  }
+
+  .popup-content p {
+    font-size: 0.8rem;
+  }
+}
