@@ -5,7 +5,6 @@ import '../styles/PlanetFarmabilityReal.css';
 // Imágenes locales de planetas
 import earthImg from '../assets/planets/earth.png';
 import marsImg from '../assets/planets/mars.png';
-import europaImg from '../assets/planets/europa.png';
 import titanImg from '../assets/planets/titan.png';
 import keplerImg from '../assets/planets/kepler452b.png';
 import venusImg from '../assets/planets/venus.png';
@@ -14,7 +13,6 @@ const planets = [
   { name: 'Tierra', type: 'earth', img: earthImg, coords: { lat: -12.0464, lon: -77.0428 } },
   { name: 'Marte', type: 'mars', img: marsImg, coords: null },
   { name: 'Venus', type: 'venus', img: venusImg, coords: null },
-  { name: 'Europa', type: 'europa', img: europaImg, coords: null },
   { name: 'Titán', type: 'titan', img: titanImg, coords: null },
   { name: 'Kepler-452b', type: 'kepler', img: keplerImg, coords: null }
 ];
@@ -118,7 +116,6 @@ const PlanetFarmabilityReal = ({ onLecturasFetched }) => {
   const fetchFictionalData = (planetName) => {
     const dataSamples = {
       Venus: { temp: 460, hum: 0 },
-      Europa: { temp: -160, hum: 0 },
       Titán: { temp: -180, hum: 5 },
       'Kepler-452b': { temp: 22, hum: 40 }
     };
